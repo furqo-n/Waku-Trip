@@ -1,0 +1,206 @@
+:root {
+    --primary: #bd002c;
+    --primary-hover: #a30026;
+    --surface-light: #ffffff;
+    --background-light: #f8f5f6;
+    --neutral-light: #e5e0e1;
+}
+
+
+/* Dashboard-specific body adjustments */
+.dashboard-page {
+    padding-top: 70px;
+    /* Account for fixed header */
+}
+
+/* Ensure header stays on top */
+.dashboard-page .header_area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999 !important;
+    /* Above sidebar */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    height: calc(100vh - 70px);
+    /* Subtract header height */
+    position: fixed;
+    top: 70px;
+    /* Position below header */
+    left: 0;
+    z-index: 90;
+    /* Below header, above content */
+    background-color: var(--surface-light);
+    border-right: 1px solid var(--neutral-light);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
+
+.main-content {
+    margin-left: 280px;
+    min-height: calc(100vh - 70px);
+    transition: all 0.3s ease;
+    padding-bottom: 0;
+    /* Remove padding, let footer handle spacing */
+    position: relative;
+    z-index: 1;
+    /* Below sidebar */
+}
+
+/* Footer positioned to the right of sidebar */
+.dashboard-page .footer_area {
+    margin-left: 280px !important;
+    width: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Navigation Links */
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: #f9fafb;
+    color: #111827;
+}
+
+.nav-link.active {
+    background-color: rgba(189, 0, 44, 0.1);
+    color: var(--primary);
+}
+
+.nav-link.active .material-icons {
+    color: var(--primary);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 20px;
+}
+
+/* Hero Section */
+.hero-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transition: transform 0.5s ease;
+}
+
+.hero-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.hero-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.hero-card:hover .hero-img {
+    transform: scale(1.05);
+}
+
+.hero-overlay {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3), transparent);
+}
+
+/* Card Styles */
+.dashboard-card {
+    background: var(--surface-light);
+    border: 1px solid var(--neutral-light);
+    border-radius: 16px;
+    padding: 24px;
+    height: 100%;
+    transition: box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom Utilities */
+.text-primary-custom {
+    color: var(--primary);
+}
+
+.bg-primary-custom {
+    background-color: var(--primary);
+}
+
+.btn-primary-custom {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-hover);
+    color: white;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background-color: #f3f4f6;
+}
+
+.avatar-ring {
+    box-shadow: 0 0 0 2px white;
+}
+
+
+@media (max-width: 991.98px) {
+    .dashboard-page {
+        padding-top: 70px;
+        /* Smaller header on mobile */
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        top: 70px;
+        height: calc(100vh - 70px);
+        z-index: 1050;
+        /* Above content on mobile when shown */
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .footer_area {
+        margin-left: 0 !important;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}

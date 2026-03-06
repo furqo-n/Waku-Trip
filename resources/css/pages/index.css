@@ -1,0 +1,178 @@
+/* Index page - Seasonal section */
+.season-btn.active {
+    background-color: var(--season-accent) !important;
+    color: white !important;
+    border-color: var(--season-accent) !important;
+}
+
+#seasonal-explore-btn:hover {
+    background-color: var(--season-accent) !important;
+    color: white !important;
+}
+
+@media (max-width: 991px) {
+    #seasonal-cards-container {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 1.25rem;
+        padding: 10px 1rem 25px 1rem !important;
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    #seasonal-cards-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    #seasonal-cards-container > [class*="col-"] {
+        flex: 0 0 calc(100% - 2rem) !important;
+        width: auto !important;
+        scroll-snap-align: center !important;
+        padding: 0 !important;
+    }
+
+    #seasonal-cards-container::after {
+        content: '';
+        flex: 0 0 0.1px;
+        padding-right: 1px;
+    }
+}
+
+/* Category section */
+.category-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.category-icon-wrapper span {
+    font-size: 32px;
+    color: #475569;
+    transition: all 0.3s ease;
+}
+
+.category-name {
+    display: block;
+    color: #334155;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.text-decoration-none:hover .category-icon-wrapper {
+    background-color: #fff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+.text-decoration-none:hover .category-icon-wrapper span {
+    color: var(--season-accent, #BC002D);
+}
+
+.text-decoration-none:hover .category-name {
+    color: var(--season-accent, #BC002D);
+}
+
+@media (max-width: 576px) {
+    .category-icon-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+
+    .category-icon-wrapper span {
+        font-size: 28px;
+    }
+
+    .category-name {
+        font-size: 0.85rem;
+    }
+}
+
+/* Trending slider */
+.trending-slider {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.trending-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.trending-slide-item {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
+    max-width: 320px;
+}
+
+/* Experience slider */
+.experience-slider {
+    display: flex;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+@media (max-width: 991px) {
+    .experience-slider {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-right: 1.5rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .experience-slider::-webkit-scrollbar {
+        display: none;
+    }
+
+    .experience-card {
+        min-width: 85vw;
+        scroll-snap-align: center;
+    }
+}
+
+/* Feature cards mobile */
+@media (max-width: 767px) {
+    .bg-white-mobile {
+        background: #fff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-feature-slider {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        padding-bottom: 2rem;
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .mobile-feature-slider::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-feature-slider .col {
+        flex: 0 0 85% !important;
+        width: 85% !important;
+        scroll-snap-align: center;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}

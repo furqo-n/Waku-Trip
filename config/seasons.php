@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'Spring' => [
+        'title' => 'Sakura Season',
+        'subtitle' => 'Highlights',
+        'description' => 'Experience the fleeting beauty of cherry blossoms with our curated seasonal specials. Available for a limited time only.',
+        'icon' => 'local_florist',
+        'accent_class' => 'season-spring',
+        'button_text' => 'View Spring Forecast',
+        'bg_gradient' => 'linear-gradient(135deg, #fef5f8 0%, #ffe8f0 50%, #ffd4e5 100%)',
+        'bg_color' => '#fef5f8',
+        'accent_color' => '#BC002D',
+    ],
+    'Summer' => [
+        'title' => 'Summer Festival',
+        'subtitle' => 'Adventures',
+        'description' => 'Immerse yourself in vibrant festivals, fireworks, and coastal escapes during Japan\'s energetic summer season.',
+        'icon' => 'wb_sunny',
+        'accent_class' => 'season-summer',
+        'button_text' => 'View Summer Events',
+        'bg_gradient' => 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 50%, #ffe082 100%)',
+        'bg_color' => '#fff8e1',
+        'accent_color' => '#f59e0b',
+    ],
+    'Autumn' => [
+        'title' => 'Autumn Foliage',
+        'subtitle' => 'Collection',
+        'description' => 'Witness the stunning transformation as Japan\'s landscapes turn into a canvas of red, orange, and gold.',
+        'icon' => 'eco',
+        'accent_class' => 'season-autumn',
+        'button_text' => 'View Autumn Tours',
+        'bg_gradient' => 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 50%, #ffcc80 100%)',
+        'bg_color' => '#fff3e0',
+        'accent_color' => '#c2410c',
+    ],
+    'Winter' => [
+        'title' => 'Winter Wonderland',
+        'subtitle' => 'Escapes',
+        'description' => 'Discover snowy peaks, hot springs, and magical winter illuminations across Japan\'s winter destinations.',
+        'icon' => 'ac_unit',
+        'accent_class' => 'season-winter',
+        'button_text' => 'View Winter Specials',
+        'bg_gradient' => 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%)',
+        'bg_color' => '#e3f2fd',
+        'accent_color' => '#0369a1',
+    ],
+];
