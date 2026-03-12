@@ -12,9 +12,10 @@
                     mountains, we help you find your waku waku (excitement).
                 </p>
                 <div class="d-flex gap-3">
-                    <a class="social-btn" href="#"><span class="material-symbols-outlined fs-5">public</span></a>
-                    <a class="social-btn" href="#"><span class="material-symbols-outlined fs-5">photo_camera</span></a>
-                    <a class="social-btn" href="#"><span class="material-symbols-outlined fs-5">videocam</span></a>
+                    <a class="social-btn" href="https://www.arealaptop.online"><i class="bi bi-globe fs-5"></i></a>
+                    <a class="social-btn" href="https://www.instagram.com/waku.trip/"><i
+                            class="bi bi-instagram fs-5"></i></a>
+                    <a class="social-btn" href="#"><i class="bi bi-tiktok fs-5"></i></a>
                 </div>
             </div>
 

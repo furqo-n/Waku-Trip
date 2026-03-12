@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prependToGroup('web', \App\Http\Middleware\DebugRequestStart::class);
         $middleware->append(\App\Http\Middleware\SetCurrency::class);
         $middleware->append(\App\Http\Middleware\IncreaseUploadTimeout::class);
+        $middleware->alias([
+            'json.request' => \App\Http\Middleware\JsonRequestMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

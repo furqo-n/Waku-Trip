@@ -3,7 +3,7 @@
 
 @include('partials.head')
 
-<body class="bg-light">
+<body class="bg-light" style="font-family: 'Inter', sans-serif;">
 
     <!--================ Header Menu Area start =================-->
     @include('partials.header')
@@ -101,190 +101,188 @@
         </div>
 
         <!-- Experience Grid -->
-        <div class="row g-3 g-md-4 mb-4 mb-md-5">
+        <div class="row g-4 mb-5">
             @forelse($packages as $package)
-                <div class="col-6 col-md-6 col-lg-6">
-                    <div class="tour-card shadow-sm rounded-4 overflow-hidden position-relative private-exp-card"
-                        style="max-width: 100%; margin-bottom: 0 !important;">
-                        <!-- Background -->
-                        <div class="position-absolute w-100 h-100" style="top: 0; left: 0;">
-                            <div class="tour-bg-image h-100 w-100"
-                                style="background-image: url('{{ $package->getFirstMediaUrl('primary_image', app_setting('default_tour_image')) }}'); background-size: cover; background-position: center;">
-                            </div>
-                            <div class="tour-overlay"></div>
-                        </div>
-
-                        <!-- Content Overlay -->
-                        <div class="position-absolute w-100 h-100 p-2 p-md-4 d-flex flex-column justify-content-between"
-                            style="top: 0; left: 0; z-index: 2;">
-
-                            <!-- Top Row: Badge & Heart -->
-                            <div class="d-flex justify-content-between align-items-start">
-                                <span
-                                    class="badge {{ $package->type == 'open' ? 'bg-white text-japan-red' : 'bg-dark text-white' }} rounded-pill px-2 py-1 fw-black text-uppercase shadow-sm private-card-badge">
-                                    {{ $package->type == 'open' ? 'Open Group' : ($package->type == 'activity' ? 'Activity' : 'Private') }}
-                                </span>
-                                <button
-                                    class="btn glass-badge rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm text-white border-0 private-card-heart"
-                                    style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px);">
-                                    <span class="material-symbols-outlined private-card-heart-icon">favorite</span>
-                                </button>
-                            </div>
-
-                            <!-- Bottom Content -->
-                            <div class="mt-auto">
-                                <!-- Categories — hidden on mobile -->
-                                <div class="d-none d-md-flex flex-wrap gap-1 mb-2">
-                                    @foreach($package->relatedCategories->take(2) as $category)
-                                        <div class="glass-badge px-2 py-1 rounded-2 d-flex align-items-center gap-1">
-                                            <span class="material-symbols-outlined" style="font-size: 12px;">
-                                                @if($category->slug == 'foodie') ramen_dining
-                                                @elseif($category->slug == 'cultural' || $category->slug == 'history')
-                                                    temple_buddhist
-                                                @elseif($category->slug == 'nature') forest
-                                                @elseif($category->slug == 'onsen') hot_tub
-                                                @else category
-                                                @endif
-                                            </span>
-                                            <span class="fw-bold text-uppercase"
-                                                style="font-size: 9px;">{{ $category->name }}</span>
-                                        </div>
-                                    @endforeach
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ route('tour.show', $package->slug) }}" class="text-decoration-none">
+                        <div class="card premium-exp-card border-0 rounded-4 overflow-hidden shadow-sm h-100"
+                            style="background: #111;">
+                            <!-- Image container -->
+                            <div class="premium-exp-img-wrapper position-relative w-100"
+                                style="aspect-ratio: 4/5; overflow: hidden;">
+                                <div class="premium-exp-bg h-100 w-100"
+                                    style="background-image: url('{{ $package->getFirstMediaUrl('primary_image', app_setting('default_tour_image')) }}'); background-size: cover; background-position: center; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+                                </div>
+                                <div class="premium-exp-overlay position-absolute w-100 h-100"
+                                    style="top:0; left:0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%); transition: opacity 0.4s ease;">
                                 </div>
 
-                                <!-- Title -->
-                                <h3 class="font-accent text-white lh-1 mb-1 private-card-title">
-                                    {{ $package->title }}
-                                </h3>
-
-                                <!-- Location -->
-                                <div
-                                    class="d-flex align-items-center gap-1 text-light text-uppercase fw-bold mb-2 opacity-75 private-card-location">
+                                <!-- Floating Badge -->
+                                <div class="position-absolute top-0 start-0 m-3">
                                     <span
-                                        class="material-symbols-outlined text-japan-red private-card-loc-icon">location_on</span>
-                                    <span>{{ $package->location_text }} • {{ $package->duration_days }}
-                                        {{ $package->duration_days == 1 ? 'Day' : 'Days' }}</span>
+                                        class="badge bg-white text-dark rounded-pill px-3 py-2 fw-bold text-uppercase shadow-sm"
+                                        style="font-size: 0.7rem; letter-spacing: 0.1em;">
+                                        {{ $package->type == 'activity' ? 'Activity' : 'Private Edition' }}
+                                    </span>
                                 </div>
 
-                                <!-- Price & Button -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="d-none d-md-block small text-white text-uppercase fw-bold opacity-75"
-                                            style="font-size: 10px;">From</span>
-                                        <span class="fw-black text-white m-0 private-card-price"
-                                            style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                                            {{ convert_currency($package->base_price) }}
+                                <!-- Floating Heart -->
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <button
+                                        class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center shadow text-secondary premium-heart-btn"
+                                        style="width: 36px; height: 36px; transition: all 0.3s ease;">
+                                        <span class="material-symbols-outlined" style="font-size: 18px;">favorite</span>
+                                    </button>
+                                </div>
+
+                                <!-- Content anchored to bottom -->
+                                <div class="position-absolute bottom-0 start-0 w-100 p-4">
+                                    <!-- Location & Duration -->
+                                    <div class="d-flex align-items-center gap-2 text-white-50 text-uppercase fw-semibold mb-2"
+                                        style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                                        <span class="material-symbols-outlined text-japan-red"
+                                            style="font-size: 14px;">location_on</span>
+                                        <span>{{ $package->location_text }}</span>
+                                        <span class="mx-1">•</span>
+                                        <span>{{ $package->duration_days }}
+                                            {{ $package->duration_days == 1 ? 'Day' : 'Days' }}</span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3 class="text-white fw-bold mb-3 premium-card-title lh-sm"
+                                        style="font-family: 'Playfair Display', serif; font-size: 1.6rem;">
+                                        {{ $package->title }}
+                                    </h3>
+
+                                    <!-- Price and Explore Line -->
+                                    <div
+                                        class="d-flex justify-content-between align-items-end mt-4 pt-3 border-top border-secondary border-opacity-25">
+                                        <div>
+                                            <span class="d-block text-white-50 text-uppercase fw-semibold mb-1"
+                                                style="font-size: 0.65rem; letter-spacing: 0.1em;">Starting At</span>
+                                            <span
+                                                class="text-white fw-bold fs-5">{{ convert_currency($package->base_price) }}</span>
+                                        </div>
+                                        <span
+                                            class="premium-explore-link text-white text-uppercase fw-bold d-flex align-items-center gap-2"
+                                            style="font-size: 0.75rem; letter-spacing: 0.1em;">
+                                            Explore <span
+                                                class="material-symbols-outlined fs-5 transition-transform">arrow_forward</span>
                                         </span>
                                     </div>
-                                    <a href="{{ route('tour.show', $package->slug) }}"
-                                        class="btn btn-light rounded-pill fw-black text-uppercase d-flex align-items-center gap-1 hover-red shadow-sm text-decoration-none private-card-btn">
-                                        <span class="d-none d-sm-inline">Details</span>
-                                        <span class="material-symbols-outlined private-card-btn-icon">arrow_forward</span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @empty
-                @if(!$featuredPackage)
-                    <div class="col-12 py-5 text-center">
-                        <span class="material-symbols-outlined fs-1 text-secondary mb-3"
-                            style="font-size: 60px;">travel_explore</span>
-                        <p class="lead text-secondary">No private experiences found.</p>
-                    </div>
-                @endif
+                <div class="col-12 py-5 my-5 text-center">
+                    <span class="material-symbols-outlined text-muted opacity-50 mb-4"
+                        style="font-size: 80px;">trip_origin</span>
+                    <h3 class="fw-bold text-dark mb-2">No Curated Experiences Found</h3>
+                    <p class="text-secondary">Try selecting a different category or contact our concierge.</p>
+                </div>
             @endforelse
         </div>
 
-        <!-- Load More Button -->
-        <div class="text-center mb-4 mb-md-5">
-            <button
-                class="btn btn-outline-dark rounded-pill px-4 px-md-5 py-2 py-md-3 fw-bold text-uppercase small shadow-sm"
-                style="letter-spacing: 0.1em;">
-                Load More <span class="d-none d-sm-inline">Experiences</span>
-                <span class="material-symbols-outlined align-middle fs-6 ms-1">expand_more</span>
-            </button>
-        </div>
-
+        <!-- Load More Section if needed -->
+        @if(count($packages) > 0)
+            <div class="text-center pb-5">
+                <button
+                    class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold text-uppercase shadow-sm premium-hover-btn"
+                    style="letter-spacing: 0.15em; font-size: 0.85rem;">
+                    Load More Experiences
+                </button>
+            </div>
+        @endif
     </div>
 
-    <!-- Concierge Service Section -->
-    <div class="bg-dark text-white py-4 py-md-5">
+    <!-- Concierge VIP Section -->
+    <div class="vip-concierge-section position-relative py-5 my-5">
+        <div class="position-absolute w-100 h-100" style="top:0; left:0; background: #0a0a0a; z-index: -2;"></div>
+        <!-- Decorative Japanese Pattern Background (Optional texture) -->
+        <div class="position-absolute w-100 h-100 opacity-10"
+            style="top:0; left:0; background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 40px 40px; z-index: -1;">
+        </div>
+
         <div class="container-fluid px-3 px-md-5" style="max-width: 1440px;">
-            <div class="row align-items-center g-4 g-lg-5">
-                <!-- Text Content -->
-                <div class="col-lg-6">
-                    <span
-                        class="bg-japan-red text-white px-2 py-1 rounded-1 fw-bold text-uppercase small mb-3 d-inline-block"
-                        style="font-size: 10px; letter-spacing: 0.1em;">
-                        Request Trip
-                    </span>
-                    <h2 class="private-concierge-title fw-bold mb-3 mb-md-4 text-white">Need a Personalized Itinerary?
-                    </h2>
-                    <p class="opacity-75 mb-3 mb-md-4" style="font-size: 0.95rem;">
-                        Can't find exactly what you're looking for? Our specialists can craft a bespoke
-                        experience tailored to your interests and schedule.
+            <div class="row g-5 align-items-center justify-content-between">
+                <!-- Text Intro -->
+                <div class="col-lg-5 text-white pe-lg-5">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div style="width: 40px; height: 1px; background: #CE1126;"></div>
+                        <span class="text-japan-red text-uppercase fw-bold"
+                            style="letter-spacing: 0.2em; font-size: 0.8rem;">Waku Concierge</span>
+                    </div>
+                    <h2 class="display-5 fw-bold mb-4 text-white" style="font-family: 'Playfair Display', serif;">Craft
+                        Your Dream Itinerary</h2>
+                    <p class="text-white-90 mb-5 fs-5 fw-light lh-lg">
+                        Step beyond the ordinary. Share your desires, and our luxury travel designers will sculpt a
+                        bespoke journey through Japan that matches your exact pace, interests, and style.
                     </p>
 
-                    <div class="d-flex flex-column gap-2 gap-md-3 mb-3 mb-md-4">
-                        <div class="d-flex align-items-center gap-2 gap-md-3">
-                            <span class="material-symbols-outlined text-japan-red bg-white rounded-circle p-1"
-                                style="font-size: 18px;">check</span>
-                            <span class="fw-medium small">Fully customizable schedules</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 gap-md-3">
-                            <span class="material-symbols-outlined text-japan-red bg-white rounded-circle p-1"
-                                style="font-size: 18px;">check</span>
-                            <span class="fw-medium small">Access to exclusive venues</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 gap-md-3">
-                            <span class="material-symbols-outlined text-japan-red bg-white rounded-circle p-1"
-                                style="font-size: 18px;">check</span>
-                            <span class="fw-medium small">Private multilingual guides</span>
-                        </div>
-                    </div>
+                    <ul class="list-unstyled mb-0 d-flex flex-column gap-3 text-white-90 fw-light">
+                        <li class="d-flex align-items-center gap-3">
+                            <span class="material-symbols-outlined text-japan-red fs-4">diamond</span>
+                            Exclusive access to hidden temples and private estates.
+                        </li>
+                        <li class="d-flex align-items-center gap-3">
+                            <span class="material-symbols-outlined text-japan-red fs-4">restaurant_menu</span>
+                            Reservations at impossible-to-book Michelin star restaurants.
+                        </li>
+                        <li class="d-flex align-items-center gap-3">
+                            <span class="material-symbols-outlined text-japan-red fs-4">directions_car</span>
+                            Seamless private transfers and elite bilingual guides.
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Request Form -->
-                <div class="col-lg-6">
-                    <div class="bg-white text-dark rounded-4 p-3 p-md-5 shadow-lg">
-                        <h3 class="h5 fw-bold mb-3 mb-md-4">Request a Quote</h3>
+                <!-- The Form Card -->
+                <div class="col-lg-6 col-xl-5">
+                    <div class="card border-0 rounded-4 p-4 p-md-5 shadow-lg position-relative overflow-hidden"
+                        style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.1) !important;">
+                        <!-- Red glow behind form -->
+                        <div class="position-absolute bg-japan-red rounded-circle"
+                            style="width: 150px; height: 150px; top: -50px; right: -50px; filter: blur(100px); opacity: 0.5; z-index: -1;">
+                        </div>
+
+                        <h3 class="text-white fw-bold mb-4 fs-4">Request a Consultation</h3>
                         <form action="#">
-                            <div class="row g-2 g-md-3">
-                                <div class="col-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-light border-0" id="firstName"
-                                            placeholder="First Name">
-                                        <label for="firstName" class="text-secondary small">First Name</label>
-                                    </div>
+                            <div class="row g-4">
+                                <div class="col-sm-6">
+                                    <label class="form-label text-white small text-uppercase fw-semibold"
+                                        style="letter-spacing: 0.1em;">First Name</label>
+                                    <input type="text"
+                                        class="form-control premium-input bg-transparent text-white border-bottom border-0 border-secondary border-opacity-50 rounded-0 px-0 shadow-none"
+                                        placeholder="John">
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control bg-light border-0" id="lastName"
-                                            placeholder="Last Name">
-                                        <label for="lastName" class="text-secondary small">Last Name</label>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-floating">
-                                        <input type="email" class="form-control bg-light border-0" id="email"
-                                            placeholder="Email Address">
-                                        <label for="email" class="text-secondary small">Email Address</label>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <label class="form-label text-white small text-uppercase fw-semibold"
+                                        style="letter-spacing: 0.1em;">Last Name</label>
+                                    <input type="text"
+                                        class="form-control premium-input bg-transparent text-white border-bottom border-0 border-secondary border-opacity-50 rounded-0 px-0 shadow-none"
+                                        placeholder="Doe">
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-floating">
-                                        <textarea class="form-control bg-light border-0"
-                                            placeholder="Tell us what you would like to experience..." id="experience"
-                                            style="height: 100px"></textarea>
-                                        <label for="experience" class="text-secondary small">Dream Experience</label>
-                                    </div>
+                                    <label class="form-label text-white small text-uppercase fw-semibold"
+                                        style="letter-spacing: 0.1em;">Email Address</label>
+                                    <input type="email"
+                                        class="form-control premium-input bg-transparent text-white border-bottom border-0 border-secondary border-opacity-50 rounded-0 px-0 shadow-none"
+                                        placeholder="john@example.com">
                                 </div>
-                                <div class="col-12 mt-3">
+                                <div class="col-12">
+                                    <label class="form-label text-white small text-uppercase fw-semibold"
+                                        style="letter-spacing: 0.1em;">Your Vision</label>
+                                    <textarea
+                                        class="form-control premium-input bg-transparent text-white border-bottom border-0 border-secondary border-opacity-50 rounded-0 px-0 shadow-none"
+                                        placeholder="Tell us about your dream trip..."
+                                        style="height: 60px; resize: none;"></textarea>
+                                </div>
+                                <div class="col-12 mt-5">
                                     <button type="submit"
-                                        class="btn btn-japan w-100 py-3 rounded-pill fw-bold text-uppercase shadow">
-                                        Send Request
+                                        class="btn btn-japan w-100 py-3 rounded-0 fw-bold text-uppercase text-white letter-spacing border-0 premium-hover-btn"
+                                        style="letter-spacing: 0.15em;">
+                                        Submit Request
                                     </button>
                                 </div>
                             </div>
@@ -295,10 +293,13 @@
         </div>
     </div>
 
+    <!-- Custom Premium Styles -->
     <style>
-        /* === Private List Mobile Responsive === */
+        /* Typography specifics */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
 
-        /* Hero title */
+        /* === Private List Mobile Responsive (Restored for Hero) === */
+
         .private-hero-title {
             font-size: 2rem;
         }
@@ -307,7 +308,6 @@
             font-size: 1.8rem;
         }
 
-        /* Featured card */
         .private-featured-card {
             height: 280px;
         }
@@ -316,59 +316,6 @@
             font-size: 1.2rem;
         }
 
-        /* Experience cards — override global .tour-card height: 520px */
-        .private-exp-card {
-            aspect-ratio: 1/1 !important;
-            height: auto !important;
-            margin-bottom: 0 !important;
-        }
-
-        .private-card-title {
-            font-size: 0.95rem;
-        }
-
-        .private-card-badge {
-            font-size: 7px !important;
-            letter-spacing: 0.05em;
-        }
-
-        .private-card-heart {
-            width: 26px;
-            height: 26px;
-        }
-
-        .private-card-heart-icon {
-            font-size: 14px;
-        }
-
-        .private-card-location {
-            font-size: 8px;
-            letter-spacing: 0.03em;
-        }
-
-        .private-card-loc-icon {
-            font-size: 11px;
-        }
-
-        .private-card-price {
-            font-size: 13px;
-        }
-
-        .private-card-btn {
-            font-size: 0;
-            padding: 6px 8px;
-        }
-
-        .private-card-btn-icon {
-            font-size: 14px;
-        }
-
-        /* Concierge */
-        .private-concierge-title {
-            font-size: 1.4rem;
-        }
-
-        /* Filter pills horizontal scroll on mobile */
         .private-filter-pills {
             overflow-x: auto;
             scrollbar-width: none;
@@ -397,56 +344,104 @@
                 font-size: 2.5rem;
             }
 
-            .private-exp-card {
-                aspect-ratio: 4/3;
-            }
-
-            .private-card-title {
-                font-size: 1.5rem;
-            }
-
-            .private-card-badge {
-                font-size: 10px !important;
-            }
-
-            .private-card-heart {
-                width: 32px;
-                height: 32px;
-            }
-
-            .private-card-heart-icon {
-                font-size: 18px;
-            }
-
-            .private-card-location {
-                font-size: 11px;
-                letter-spacing: 0.05em;
-            }
-
-            .private-card-loc-icon {
-                font-size: 16px;
-            }
-
-            .private-card-price {
-                font-size: 1.5rem;
-            }
-
-            .private-card-btn {
-                font-size: 11px;
-                padding: 8px 16px;
-            }
-
-            .private-card-btn-icon {
-                font-size: 16px;
-            }
-
-            .private-concierge-title {
-                font-size: 2.5rem;
-            }
-
             .private-filter-pills {
                 flex-wrap: wrap;
                 overflow-x: visible;
+            }
+        }
+
+
+        /* Filter Pills Scroll Hiding */
+        .premium-filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .premium-filter-bar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hover-dark:hover {
+            color: #111 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        /* Card Animations */
+        .premium-exp-card {
+            transition: all 0.4s ease;
+            transform: translateY(0);
+        }
+
+        .premium-exp-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .premium-exp-card:hover .premium-exp-bg {
+            transform: scale(1.1);
+        }
+
+        .premium-explore-link span {
+            transition: transform 0.3s ease;
+        }
+
+        .premium-exp-card:hover .premium-explore-link span {
+            transform: translateX(4px);
+            color: #CE1126;
+            /* Japan Red */
+        }
+
+        .premium-heart-btn:hover {
+            background-color: #CE1126 !important;
+            color: white !important;
+            transform: scale(1.1);
+        }
+
+        /* Form Inputs */
+        .premium-input:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border-color: #CE1126 !important;
+        }
+
+        .premium-input::placeholder {
+            color: rgba(255, 255, 255, 0.2) !important;
+            font-weight: 300;
+        }
+
+        /* Hover Buttons */
+        .premium-hover-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-hover-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .premium-hover-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Hero text animation hook */
+        .premium-hero-bg {
+            animation: slowZoom 20s infinite alternate linear;
+        }
+
+        @keyframes slowZoom {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
             }
         }
     </style>

@@ -55,6 +55,6 @@ Route::post('/order', [PaymentController::class, 'storeOrder'])->name('order.sto
 Route::get('/pay', [PaymentController::class, 'showPayment'])->name('pay.form')->middleware('auth');
 Route::post('/pay', [PaymentController::class, 'confirmPayment'])->name('pay.confirm')->middleware('auth');
 
-Route::post('/chatbot', [App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.chat');
-Route::get('/chatbot/recommend', [App\Http\Controllers\ChatbotController::class, 'recommend'])->name('chatbot.recommend');
+Route::post('/chatbot', [App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.chat')->middleware(['throttle:10,1', 'json.request']);
+Route::get('/chatbot/recommend', [App\Http\Controllers\ChatbotController::class, 'recommend'])->name('chatbot.recommend')->middleware(['throttle:10,1', 'json.request']);
 Route::post('/currency/switch', [App\Http\Controllers\CurrencyController::class, 'switch'])->name('currency.switch');

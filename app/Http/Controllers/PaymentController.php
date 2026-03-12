@@ -26,9 +26,9 @@ class PaymentController extends Controller
         $schedule = TripSchedule::with('package')->findOrFail($scheduleId);
         $pricePerPerson = $schedule->price;
         $totalPrice = $pricePerPerson * $guests;
-        $ppn = $totalPrice * 0.12;
-        $fee = $totalPrice * 0.10;
-        $discount = $totalPrice * 0.07;
+        $ppn = $totalPrice * config('pricing.tax_rate', 0.12);
+        $fee = $totalPrice * config('pricing.fee_rate', 0.10);
+        $discount = $totalPrice * config('pricing.discount_rate', 0.07);
         $finalTotal = $totalPrice + $ppn + $fee - $discount;
 
         $durationDays = \Carbon\Carbon::parse($schedule->start_date)->diffInDays(\Carbon\Carbon::parse($schedule->end_date)) + 1;

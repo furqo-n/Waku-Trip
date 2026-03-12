@@ -99,7 +99,7 @@ return new class extends Migration
             $table->string('booking_code')->unique(); // e.g., TRP-2023-001
             $table->integer('pax_count');
             $table->decimal('total_price', 10, 2);
-            $table->enum('status', ['pending', 'confirmed', 'paid', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'paid', 'cancelled', 'completed'])->default('pending');
             $table->text('special_requests')->nullable();
             $table->timestamps();
         });

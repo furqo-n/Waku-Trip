@@ -12,7 +12,7 @@ class MediaAsset extends Model
 
     protected $fillable = [
         'public_id',
-        'url',
+        'url',  
         'status',
     ];
 
@@ -24,8 +24,10 @@ class MediaAsset extends Model
     {
         $url = $this->url;
 
-        // Ensure it's a Cloudinary URL
-        if (!str_contains($url, '/image/upload/')) {
+        $cloudName = config('filesystems.disks.cloudinary.cloud');
+
+        // Ensure it's a Cloudinary URL belonging to this app
+        if (!str_contains($url, 'res.cloudinary.com/' . $cloudName . '/image/upload/')) {
             return $url;
         }
 

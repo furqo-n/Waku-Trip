@@ -149,7 +149,7 @@
                                 <button type="button" onclick="switchSeason('{{ $season }}', this)"
                                     class="season-btn btn btn-sm rounded-pill px-3 py-1 d-flex align-items-center gap-1 fw-bold text-uppercase shadow-sm user-select-none {{ $currentSeason == $season ? 'active' : 'bg-white text-dark border' }}"
                                     style="font-size: 0.7rem; letter-spacing: 0.05em; text-decoration: none; transition: all 0.3s; cursor: pointer;
-                                                                                                                                                    {{ $currentSeason == $season ? 'background-color: var(--season-accent); color: white; border-color: var(--season-accent);' : '' }}">
+                                                                                                                                                        {{ $currentSeason == $season ? 'background-color: var(--season-accent); color: white; border-color: var(--season-accent);' : '' }}">
 
                                     <span class="material-symbols-outlined"
                                         style="font-size: 14px; pointer-events: none;">{{ $icon }}</span>

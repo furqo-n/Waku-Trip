@@ -9,14 +9,14 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Template Styles (Legacy) -->
-    <!-- <link rel="stylesheet" href="{{ asset('vendors/bootstrap/bootstrap.min.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('vendors/bootstrap/bootstrap.min.css') }}"
     <link rel="stylesheet" href="{{ asset('vendors/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/themify-icons/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/linericon/style.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/owl-carousel/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/owl-carousel/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/flat-icon/font/flaticon.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/nice-select/nice-select.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/nice-select/nice-select.css') }}">> -->
 
     <!-- Modern Standards -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,5 +60,7 @@
     </noscript>
 
     <!-- Main Styles -->
-    <link rel="stylesheet" href="{{ asset('css/style.css?v=1.4') }}">
+    @vite('resources/css/style.css')
+    @vite('resources/css/dashboard.css')
+    @vite('resources/css/magnific-popup.css')
 </head>

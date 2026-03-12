@@ -29,9 +29,9 @@ class BookingService
         }
 
         $basePrice = $schedule->price * $bookingData['guests'];
-        $ppn = $basePrice * 0.12;
-        $fee = $basePrice * 0.10;
-        $discount = $basePrice * 0.07;
+        $ppn = $basePrice * config('pricing.tax_rate', 0.12);
+        $fee = $basePrice * config('pricing.fee_rate', 0.10);
+        $discount = $basePrice * config('pricing.discount_rate', 0.07);
         $totalPrice = $basePrice + $ppn + $fee - $discount;
 
         $bookingCode = self::generateBookingCode();
@@ -66,9 +66,9 @@ class BookingService
         $guests = $bookingData['guests'];
         $pricePerPerson = $schedule->price;
         $basePrice = $pricePerPerson * $guests;
-        $ppn = $basePrice * 0.12;
-        $fee = $basePrice * 0.10;
-        $discount = $basePrice * 0.07;
+        $ppn = $basePrice * config('pricing.tax_rate', 0.12);
+        $fee = $basePrice * config('pricing.fee_rate', 0.10);
+        $discount = $basePrice * config('pricing.discount_rate', 0.07);
         $totalPrice = $basePrice + $ppn + $fee - $discount;
 
         $durationDays = \Carbon\Carbon::parse($schedule->start_date)->diffInDays(\Carbon\Carbon::parse($schedule->end_date)) + 1;
