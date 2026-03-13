@@ -11,7 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE bookings MODIFY COLUMN status ENUM('pending', 'confirmed', 'paid', 'cancelled', 'completed') DEFAULT 'pending'");
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->enum('status', ['pending', 'confirmed', 'paid', 'cancelled', 'completed'])
+                  ->default('pending')
+                  ->change();
+        });
     }
 
     /**
@@ -19,6 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        \Illuminate\Support\Facades\DB::statement("ALTER TABLE bookings MODIFY COLUMN status ENUM('pending', 'confirmed', 'paid', 'cancelled') DEFAULT 'pending'");
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->enum('status', ['pending', 'confirmed', 'paid', 'cancelled'])
+                  ->default('pending')
+                  ->change();
+        });
     }
 };
