@@ -1,19 +1,47 @@
 <header class="header_area sticky-top w-100"
-    style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); z-index: 1030;">
+    style="background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); box-shadow: 0 2px 16px rgba(0,0,0,0.06); z-index: 1030;">
     <style>
-        /* Header Enhanced Styling */
-        .navbar {
-            padding: 0.8rem 0;
+        /* ── Base Navbar ─────────────────────────────────── */
+        .header_area .navbar {
+            padding: 0;
+            min-height: 58px;
         }
 
+        .header_area .container-fluid {
+            height: 58px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* ── Logo ────────────────────────────────────────── */
+        .brand-logo {
+            height: 34px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.2s ease;
+        }
+
+        .navbar-brand {
+            padding: 0;
+            margin-right: 0;
+            line-height: 1;
+        }
+
+        .navbar-brand:hover .brand-logo {
+            opacity: 0.85;
+        }
+
+        /* ── Nav Links ───────────────────────────────────── */
         .nav-link {
             position: relative;
             color: #2c3e50 !important;
             font-weight: 600;
-            font-size: 15px;
-            padding: 0.5rem 1rem !important;
-            margin: 0 0.2rem;
-            transition: color 0.3s ease;
+            font-size: 14.5px;
+            padding: 0.45rem 0.9rem !important;
+            margin: 0 0.1rem;
+            transition: color 0.25s ease;
+            white-space: nowrap;
         }
 
         .nav-link:hover,
@@ -27,7 +55,7 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: 0px;
+            bottom: -2px;
             left: 50%;
             background-color: #BC002D;
             transition: all 0.3s ease;
@@ -37,22 +65,23 @@
 
         .nav-link:hover::after,
         .nav-item.active .nav-link::after {
-            width: 80%;
+            width: 70%;
         }
 
-        /* Dropdown Enhancements */
+        /* ── Dropdown ────────────────────────────────────── */
         .dropdown-menu {
             border: none;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            background-color: #f5ececff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.79);
             border-radius: 12px;
-            padding: 0.5rem;
-            animation: fadeInDropdown 0.2s ease-out forwards;
+            padding: 0.4rem;
+            animation: fadeInDrop 0.18s ease-out forwards;
         }
 
-        @keyframes fadeInDropdown {
+        @keyframes fadeInDrop {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(8px);
             }
 
             to {
@@ -63,10 +92,11 @@
 
         .dropdown-item {
             border-radius: 8px;
-            transition: all 0.2s ease;
+            transition: all 0.18s ease;
             font-weight: 500;
-            padding: 0.6rem 1rem;
+            padding: 0.55rem 1rem;
             color: #4a5568;
+            font-size: 14px;
         }
 
         .dropdown-item:hover,
@@ -80,78 +110,141 @@
             color: white !important;
         }
 
-        /* Action Buttons */
-        .btn-action-icon {
-            color: #2c3e50;
-            transition: all 0.2s ease;
-            width: 40px;
-            height: 40px;
+        /* ── Icon Buttons ────────────────────────────────── */
+        .btn-icon-hdr {
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            border: none;
             background: transparent;
+            color: #374151;
+            transition: background 0.2s ease, color 0.2s ease;
+            padding: 0;
+            flex-shrink: 0;
         }
 
-        .btn-action-icon:hover {
+        .btn-icon-hdr:hover {
             background: rgba(188, 0, 45, 0.08);
             color: #BC002D;
         }
 
-        /* User Avatar */
-        .user-avatar {
-            width: 38px;
-            height: 38px;
-            font-size: 14px;
+        /* ── User Avatar ─────────────────────────────────── */
+        .user-avatar-hdr {
+            width: 34px;
+            height: 34px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 50%;
             background: linear-gradient(135deg, #BC002D, #e63946);
-            box-shadow: 0 4px 10px rgba(188, 0, 45, 0.2);
+            box-shadow: 0 3px 8px rgba(188, 0, 45, 0.25);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
             transition: transform 0.2s ease;
         }
 
-        .dropdown-toggle-user:hover .user-avatar {
-            transform: scale(1.05);
+        .dropdown-toggle-user:hover .user-avatar-hdr {
+            transform: scale(1.06);
         }
 
-        /* Login Pill Button */
-        .btn-login {
+        /* ── Login Button ────────────────────────────────── */
+        .btn-login-hdr {
             background: #BC002D;
             color: white !important;
             border-radius: 50px;
-            padding: 0.4rem 1.2rem;
+            padding: 0.35rem 1.1rem;
             font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(188, 0, 45, 0.25);
+            font-size: 13.5px;
             border: none;
-            margin-left: 1rem;
+            box-shadow: 0 3px 12px rgba(188, 0, 45, 0.22);
+            transition: all 0.25s ease;
+            white-space: nowrap;
         }
 
-        .btn-login:hover {
+        .btn-login-hdr:hover {
             background: #9a0025;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(188, 0, 45, 0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 18px rgba(188, 0, 45, 0.32);
         }
 
-        /* Toggler Icon for Mobile */
-        .navbar-toggler {
+        /* ── Mobile Hamburger ───────────────────────────── */
+        .hdr-toggler {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: none;
-            padding: 0.5rem;
+            background: transparent;
             border-radius: 8px;
-            transition: background 0.3s;
+            padding: 0;
+            color: #374151;
+            transition: background 0.2s ease;
+            flex-shrink: 0;
+            cursor: pointer;
         }
 
-        .navbar-toggler:focus,
-        .navbar-toggler:hover {
-            background: rgba(0, 0, 0, 0.05) !important;
+        .hdr-toggler:hover,
+        .hdr-toggler:focus {
+            background: rgba(0, 0, 0, 0.05);
+            outline: none;
             box-shadow: none;
         }
 
+        /* ── Mobile Collapse ─────────────────────────────── */
+        @media (max-width: 991.98px) {
+            .header_area .navbar {
+                min-height: 56px;
+            }
+
+            .header_area .container-fluid {
+                height: 56px;
+                flex-wrap: wrap;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            /* The top bar stays at 56px, collapse drops below */
+            #navbarSupportedContent {
+                width: 100%;
+                border-top: 1px solid rgba(0, 0, 0, 0.07);
+                padding: 8px 0 12px;
+            }
+
+            .navbar-nav .nav-link {
+                padding: 0.55rem 0.5rem !important;
+                font-size: 14.5px;
+                text-align: left;
+                border-radius: 8px;
+            }
+
+            .navbar-nav .nav-link:hover {
+                background: rgba(188, 0, 45, 0.05);
+            }
+
+            .navbar-nav .nav-link::after {
+                display: none;
+            }
+
+            .mobile-nav-footer {
+                padding-top: 8px;
+                border-top: 1px solid rgba(0, 0, 0, 0.06);
+                margin-top: 4px;
+            }
+        }
+
+        /* ── Desktop only ────────────────────────────────── */
         .hover-scale {
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
         }
 
         .hover-scale:hover {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
 
         .text-japan-red {
@@ -161,37 +254,41 @@
 
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid px-3 px-lg-5">
-                <!-- Mobile Sidebar Toggle (Dashboard Only) -->
-                @if(request()->is('dashboard*'))
-                    <button class="btn btn-link d-lg-none me-2 p-0 text-dark" type="button" onclick="toggleSidebar()">
-                        <span class="material-symbols-outlined fs-2">menu</span>
-                    </button>
-                @endif
+            <div class="container-fluid px-3 px-md-4 px-lg-5">
 
-                <a class="navbar-brand py-0 d-flex align-items-center" href="{{ url('/') }}">
-                    <img src="{{ asset('img/logo_1.png') }}" alt="Waku Trip" style="height: 35px; object-fit: contain;"
-                        class="brand-logo hover-scale">
-                </a>
-
-                {{-- Mobile Actions: Currency + Avatar (Visible only on mobile <lg) --}} <div
-                    class="d-flex align-items-center gap-1 d-lg-none ms-auto me-2">
-                    <!-- Currency Switcher Mobile -->
-                    <div class="dropdown">
-                        <button class="btn btn-action-icon shadow-none" type="button" id="currencyDropdownMobile"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="material-symbols-outlined fs-5">payments</span>
+                {{-- ════ LEFT: Logo (+ sidebar toggle on dashboard) ════ --}}
+                <div class="d-flex align-items-center" style="flex-shrink:0;">
+                    @if(request()->is('dashboard*'))
+                        <button class="btn-icon-hdr d-lg-none me-1" type="button" onclick="toggleSidebar()"
+                            aria-label="Sidebar">
+                            <span class="material-symbols-outlined" style="font-size:22px;">menu</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="currencyDropdownMobile"
-                            style="min-width: 160px; margin-top: 10px;">
+                    @endif
+
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <img src="{{ asset('img/logo_1.png') }}" alt="Waku Trip" class="brand-logo hover-scale">
+                    </a>
+                </div>
+
+                {{-- ════ RIGHT (mobile only): currency + avatar + hamburger ════ --}}
+                <div class="d-flex align-items-center gap-2 d-lg-none ms-auto">
+
+                    {{-- Currency icon --}}
+                    <div class="dropdown">
+                        <button class="btn-icon-hdr" type="button" id="currMobile" data-bs-toggle="dropdown"
+                            aria-expanded="false" aria-label="Currency">
+                            <span class="material-symbols-outlined" style="font-size:20px;">payments</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="currMobile"
+                            style="min-width:150px; margin-top:8px;">
                             @foreach(config('currency.currencies') as $code => $details)
                                 <li>
                                     <form action="{{ route('currency.switch') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="currency" value="{{ $code }}">
                                         <button type="submit"
-                                            class="dropdown-item d-flex justify-content-between align-items-center py-2 {{ ($currentCurrency ?? 'USD') == $code ? 'active' : '' }}">
-                                            <span class="fw-bold">{{ $code }}</span>
+                                            class="dropdown-item d-flex justify-content-between align-items-center {{ ($currentCurrency ?? 'USD') == $code ? 'active' : '' }}">
+                                            <span class="fw-semibold">{{ $code }}</span>
                                             <span
                                                 class="small {{ ($currentCurrency ?? 'USD') == $code ? 'text-white-50' : 'text-muted' }}">{{ $details['symbol'] }}</span>
                                         </button>
@@ -201,151 +298,160 @@
                         </ul>
                     </div>
 
+                    {{-- User avatar / Login --}}
                     @auth
                         <div class="dropdown">
-                            <button class="btn p-0 dropdown-toggle-user ms-1 shadow-none" type="button"
-                                id="userDropdownMobile" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="border: none; background: none;">
-                                <div
-                                    class="rounded-circle user-avatar d-flex align-items-center justify-content-center text-white fw-bold">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
+                            <button class="dropdown-toggle-user p-0" type="button" id="avatarMobile"
+                                data-bs-toggle="dropdown" aria-expanded="false"
+                                style="border:none; background:none; cursor:pointer;">
+                                <div class="user-avatar-hdr">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
                             </button>
-                            <div class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdownMobile"
-                                style="min-width: 200px; margin-top: 10px;">
-                                <div class="px-3 py-3 border-bottom bg-light rounded-top">
-                                    <p class="mb-0 fw-bold text-dark">{{ Auth::user()->name }}</p>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="avatarMobile"
+                                style="min-width:200px; margin-top:8px;">
+                                <div class="px-3 py-2 border-bottom bg-light" style="border-radius:12px 12px 0 0;">
+                                    <p class="mb-0 fw-bold text-dark" style="font-size:14px;">{{ Auth::user()->name }}</p>
                                 </div>
-                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 mt-2"
+                                <a class="dropdown-item d-flex align-items-center gap-2 mt-1"
                                     href="{{ route('dashboard') }}">
                                     <span class="material-symbols-outlined text-japan-red"
-                                        style="font-size: 20px;">space_dashboard</span>
-                                    <span>Dashboard</span>
+                                        style="font-size:18px;">space_dashboard</span>
+                                    Dashboard
                                 </a>
-                                <div class="dropdown-divider my-2"></div>
+                                <div class="dropdown-divider my-1"></div>
                                 <form action="{{ route('logout') }}" method="POST" class="m-0">
                                     @csrf
-                                    <button type="submit"
-                                        class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger">
-                                        <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
-                                        <span>Sign Out</span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endauth
-            </div>
-
-            <button class="navbar-toggler shadow-none bg-transparent" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="material-symbols-outlined fs-1 text-dark">menu</span>
-            </button>
-
-            <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto text-center text-lg-start mt-2 mt-lg-0">
-                    <li class="nav-item {{ request()->is('/') ? 'active' : '' }}"><a class="nav-link"
-                            href="{{ url('/') }}">Home</a></li>
-                    <li class="nav-item {{ request()->is('planned_list') ? 'active' : '' }}"><a class="nav-link"
-                            href="{{ url('/planned_list') }}">Planned Trip</a></li>
-                    <li class="nav-item {{ request()->is('private_list') ? 'active' : '' }}"><a class="nav-link"
-                            href="{{ url('/private_list') }}">Private Trip</a></li>
-                    <li class="nav-item dropdown {{ request()->is('news*') ? 'active' : '' }}">
-                        <a href="#"
-                            class="nav-link dropdown-toggle d-flex align-items-center justify-content-center justify-content-lg-start gap-1"
-                            data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            News
-                        </a>
-                        <ul class="dropdown-menu shadow-sm mt-lg-3">
-                            <li><a class="dropdown-item" href="{{ url('/news') }}">Trending</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/news') }}">Recent</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item {{ request()->is('aboutus') ? 'active' : '' }}"><a class="nav-link"
-                            href="{{ url('/aboutus') }}">About Us</a></li>
-                </ul>
-
-                <div
-                    class="nav-right d-flex flex-column flex-lg-row align-items-center gap-2 mt-3 mt-lg-0 pb-3 pb-lg-0 border-top border-lg-0 pt-3 pt-lg-0">
-                    <!-- Currency Switcher Desktop -->
-                    <div class="dropdown d-none d-lg-block">
-                        <button class="btn btn-action-icon gap-1 px-3 w-auto shadow-none d-flex align-items-center"
-                            type="button" id="currencyDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="material-symbols-outlined" style="font-size: 20px;">payments</span>
-                            <span class="fw-bold small">{{ $currentCurrency ?? 'USD' }}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end mt-3 shadow-sm" aria-labelledby="currencyDropdown"
-                            style="min-width: 200px;">
-                            @foreach(config('currency.currencies') as $code => $details)
-                                <li>
-                                    <form action="{{ route('currency.switch') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="currency" value="{{ $code }}">
-                                        <button type="submit"
-                                            class="dropdown-item d-flex justify-content-between align-items-center py-2 {{ ($currentCurrency ?? 'USD') == $code ? 'active' : '' }}">
-                                            <span class="d-flex align-items-center gap-2">
-                                                <span class="fw-bold">{{ $code }}</span>
-                                                <span
-                                                    class="{{ ($currentCurrency ?? 'USD') == $code ? 'text-white-50' : 'text-muted' }} small">{{ $details['name'] }}</span>
-                                            </span>
-                                            <span
-                                                class="{{ ($currentCurrency ?? 'USD') == $code ? 'text-white' : 'text-dark' }} fw-semibold">{{ $details['symbol'] }}</span>
-                                        </button>
-                                    </form>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-
-                    @auth
-                        {{-- Desktop User Dropdown --}}
-                        <div class="dropdown d-none d-lg-block">
-                            <button
-                                class="btn shadow-none dropdown-toggle-user d-flex align-items-center gap-2 p-1 pe-3 rounded-pill bg-light border"
-                                type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="transition: all 0.2s;">
-                                <div
-                                    class="rounded-circle user-avatar d-flex align-items-center justify-content-center text-white fw-bold">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                                <span class="text-dark fw-bold small">{{ Auth::user()->name }}</span>
-                                <span class="material-symbols-outlined text-secondary"
-                                    style="font-size: 18px;">expand_more</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end mt-3 shadow-sm" aria-labelledby="userDropdown"
-                                style="min-width: 220px;">
-                                <div class="px-4 py-3 border-bottom bg-light rounded-top text-center">
-                                    <div class="rounded-circle user-avatar mx-auto mb-2 d-flex align-items-center justify-content-center text-white fw-bold fs-5"
-                                        style="width: 48px; height: 48px;">
-                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                    </div>
-                                    <p class="mb-0 fw-bold text-dark">{{ Auth::user()->name }}</p>
-                                </div>
-                                <a class="dropdown-item d-flex align-items-center gap-3 py-2 mt-2 px-4"
-                                    href="{{ route('dashboard') }}">
-                                    <span class="material-symbols-outlined text-japan-red">space_dashboard</span>
-                                    <span class="fw-medium">Dashboard</span>
-                                </a>
-                                <div class="dropdown-divider my-2"></div>
-                                <form action="{{ route('logout') }}" method="POST" class="m-0">
-                                    @csrf
-                                    <button type="submit"
-                                        class="dropdown-item d-flex align-items-center gap-3 py-2 text-danger px-4">
-                                        <span class="material-symbols-outlined">logout</span>
-                                        <span class="fw-medium">Sign Out</span>
+                                    <button type="submit" class="dropdown-item d-flex align-items-center gap-2 text-danger">
+                                        <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+                                        Sign Out
                                     </button>
                                 </form>
                             </div>
                         </div>
                     @else
-                        <!-- Login Button (Responsive) -->
-                        <a class="btn btn-login d-none d-lg-inline-block" href="{{ url('/login') }}">Sign In</a>
-                        <!-- Mobile login button -->
-                        <a class="btn btn-login d-lg-none mt-2 w-100 mx-0" href="{{ url('/login') }}">Sign In</a>
+                        <a class="btn-login-hdr" href="{{ url('/login') }}">Sign In</a>
                     @endauth
+
+                    {{-- Hamburger --}}
+                    <button class="hdr-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Menu">
+                        <span class="material-symbols-outlined" style="font-size:22px;">menu</span>
+                    </button>
                 </div>
+
+                {{-- ════ COLLAPSE: nav links + desktop right actions ════ --}}
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-lg-auto">
+                        <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        </li>
+                        <li class="nav-item {{ request()->is('planned_list') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ url('/planned_list') }}">Planned Trip</a>
+                        </li>
+                        <li class="nav-item {{ request()->is('private_list') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ url('/private_list') }}">Private Trip</a>
+                        </li>
+                        <li class="nav-item dropdown {{ request()->is('news*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link dropdown-toggle d-flex align-items-center gap-1"
+                                data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                News
+                            </a>
+                            <ul class="dropdown-menu mt-lg-2">
+                                <li><a class="dropdown-item" href="{{ url('/news') }}">Trending</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/news') }}">Recent</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item {{ request()->is('aboutus') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ url('/aboutus') }}">About Us</a>
+                        </li>
+                    </ul>
+
+                    {{-- Desktop right actions --}}
+                    <div class="d-none d-lg-flex align-items-center gap-2 ms-2">
+                        {{-- Currency Desktop --}}
+                        <div class="dropdown">
+                            <button class="btn-icon-hdr gap-1 px-3 w-auto rounded-pill d-flex align-items-center"
+                                type="button" id="currDesktop" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="material-symbols-outlined" style="font-size:18px;">payments</span>
+                                <span class="fw-semibold" style="font-size:13px;">{{ $currentCurrency ?? 'USD' }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="currDesktop"
+                                style="min-width:200px;">
+                                @foreach(config('currency.currencies') as $code => $details)
+                                    <li>
+                                        <form action="{{ route('currency.switch') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="currency" value="{{ $code }}">
+                                            <button type="submit"
+                                                class="dropdown-item d-flex justify-content-between align-items-center {{ ($currentCurrency ?? 'USD') == $code ? 'active' : '' }}">
+                                                <span class="d-flex align-items-center gap-2">
+                                                    <span class="fw-semibold">{{ $code }}</span>
+                                                    <span
+                                                        class="small {{ ($currentCurrency ?? 'USD') == $code ? 'text-white-50' : 'text-muted' }}">{{ $details['name'] }}</span>
+                                                </span>
+                                                <span
+                                                    class="fw-semibold {{ ($currentCurrency ?? 'USD') == $code ? 'text-white' : 'text-dark' }}">{{ $details['symbol'] }}</span>
+                                            </button>
+                                        </form>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        @auth
+                            {{-- Desktop User --}}
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle-user d-flex align-items-center gap-2 shadow-none"
+                                    type="button" id="userDesktop" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="background: #f8f8f8; border: 1px solid #e5e7eb; border-radius: 50px; padding: 5px 12px 5px 5px; transition: all 0.2s;">
+                                    <div class="user-avatar-hdr">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                                    <span class="text-dark fw-semibold"
+                                        style="font-size:13.5px;">{{ Auth::user()->name }}</span>
+                                    <span class="material-symbols-outlined text-secondary"
+                                        style="font-size:16px;">expand_more</span>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userDesktop"
+                                    style="min-width:210px;">
+                                    <div class="px-4 py-3 border-bottom text-center"
+                                        style="background:#f9fafb; border-radius:12px 12px 0 0;">
+                                        <div class="user-avatar-hdr mx-auto mb-2"
+                                            style="width:44px; height:44px; font-size:16px;">
+                                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                        </div>
+                                        <p class="mb-0 fw-bold text-dark" style="font-size:14px;">{{ Auth::user()->name }}
+                                        </p>
+                                    </div>
+                                    <a class="dropdown-item d-flex align-items-center gap-3 mt-1 px-4"
+                                        href="{{ route('dashboard') }}">
+                                        <span class="material-symbols-outlined text-japan-red"
+                                            style="font-size:19px;">space_dashboard</span>
+                                        <span class="fw-medium">Dashboard</span>
+                                    </a>
+                                    <div class="dropdown-divider my-1"></div>
+                                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                        @csrf
+                                        <button type="submit"
+                                            class="dropdown-item d-flex align-items-center gap-3 text-danger px-4">
+                                            <span class="material-symbols-outlined" style="font-size:19px;">logout</span>
+                                            <span class="fw-medium">Sign Out</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <a class="btn-login-hdr" href="{{ url('/login') }}">Sign In</a>
+                        @endauth
+                    </div>
+
+                    {{-- Mobile login (inside collapse, guest only) --}}
+                    @guest
+                        <div class="d-lg-none mobile-nav-footer">
+                            <a class="btn-login-hdr d-block text-center" href="{{ url('/login') }}">Sign In</a>
+                        </div>
+                    @endguest
+                </div>
+
             </div>
-    </div>
-    </nav>
+        </nav>
     </div>
 </header>

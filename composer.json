@@ -10,6 +10,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-intl": "*",
+        "ext-zip": "*",
         "ariaieboy/filament-currency": "^3.0",
         "cloudinary-labs/cloudinary-laravel": "^3.0",
         "danihidayatx/image-optimizer": "^2.1",

@@ -145,6 +145,28 @@ class PackageResource extends Resource
                                         if ($record && $media = $record->getFirstMedia('primary_image')) {
                                             $component->state($media->public_id);
                                         }
+                                    })
+                                    ->dehydrated(false)
+                                    ->saveRelationshipsUsing(function ($record, $state) {
+                                        if (empty($state)) {
+                                            $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+                                            return;
+                                        }
+
+                                        $cloudName = config('filesystems.disks.cloudinary.cloud');
+                                        
+                                        // Always detach existing primary image
+                                        $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+
+                                        $media = \App\Models\MediaAsset::firstOrCreate(
+                                            ['public_id' => $state],
+                                            [
+                                                'url' => "https://res.cloudinary.com/{$cloudName}/image/upload/{$state}",
+                                                'status' => 'permanent'
+                                            ]
+                                        );
+
+                                        $record->media()->attach($media->id, ['collection_name' => 'primary_image']);
                                     }),
 
                                 Forms\Components\FileUpload::make('gallery_images')
@@ -161,37 +183,41 @@ class PackageResource extends Resource
                                     })
                                     ->dehydrated(false)
                                     ->saveRelationshipsUsing(function ($record, $state) {
-                                        $mediaIds = [];
-                                        if (is_array($state)) {
-                                            foreach ($state as $path) {
-                                                if (!filter_var($path, FILTER_VALIDATE_URL)) {
-                                                $cloudName = config('filesystems.disks.cloudinary.cloud');
-                                                $media = \App\Models\MediaAsset::firstOrCreate(
-                                                    ['public_id' => $path],
-                                                    ['url' => "https://res.cloudinary.com/{$cloudName}/image/upload/{$path}", 'status' => 'permanent']
-                                                );
-                                                    $mediaIds[] = $media->id;
-                                                } else {
-                                                    $media = \App\Models\MediaAsset::where('url', $path)->first();
-                                                    if ($media) {
-                                                        $mediaIds[] = $media->id;
-                                                    }
-                                                }
-                                            }
+                                        // 1. Detach all current gallery media for this package to handle removals easily
+                                        $record->media()->wherePivot('collection_name', 'gallery')->detach();
+
+                                        if (empty($state)) {
+                                            return;
                                         }
-                                        
+
+                                        $cloudName = config('filesystems.disks.cloudinary.cloud');
                                         $syncData = [];
-                                        foreach ($mediaIds as $id) {
-                                            $syncData[$id] = ['collection_name' => 'gallery'];
+
+                                        foreach ($state as $path) {
+                                            if (empty($path)) continue;
+
+                                            // If it's already a full URL
+                                            if (filter_var($path, FILTER_VALIDATE_URL)) {
+                                                 $media = \App\Models\MediaAsset::where('url', $path)->first();
+                                                 if ($media) {
+                                                     $syncData[$media->id] = ['collection_name' => 'gallery'];
+                                                 }
+                                                 continue;
+                                            }
+
+                                            $media = \App\Models\MediaAsset::firstOrCreate(
+                                                ['public_id' => $path],
+                                                [
+                                                    'url' => "https://res.cloudinary.com/{$cloudName}/image/upload/{$path}",
+                                                    'status' => 'permanent'
+                                                ]
+                                            );
+                                            $syncData[$media->id] = ['collection_name' => 'gallery'];
                                         }
-                                        
-                                        $existingGalleryIds = $record->getMedia('gallery')->pluck('id')->toArray();
-                                        $idsToDetach = array_diff($existingGalleryIds, $mediaIds);
-                                        if (!empty($idsToDetach)) {
-                                            $record->media()->wherePivot('collection_name', 'gallery')->detach($idsToDetach);
+
+                                        if (!empty($syncData)) {
+                                            $record->media()->syncWithoutDetaching($syncData);
                                         }
-                                        
-                                        $record->media()->syncWithoutDetaching($syncData);
                                     })
                             ]),
 
