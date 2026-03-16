@@ -31,7 +31,7 @@ class MediaAsset extends Model
             return $url;
         }
 
-        $transformations = ['f_auto', 'q_auto'];
+        $transformations = ['f_auto', 'q_auto:eco'];
 
         if ($width) {
             $transformations[] = "w_{$width}";
