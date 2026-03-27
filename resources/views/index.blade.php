@@ -230,7 +230,7 @@
                     @foreach($trendingTours as $index => $tour)
                         <a href="{{ route('tour.show', $tour->slug) }}" class="text-decoration-none trending-slide-item">
                             <div class="ratio ratio-4x5 tour-card shadow-lg rounded-4 overflow-hidden">
-                                <div class="tour-bg" style="background-image: url('{{ $tour->primary_image_url }}');">
+                                <div class="tour-bg" style="background-image: url('{{ $tour->primary_image_url }}'); content-visibility: auto;">
                                 </div>
                                 <div class="gradient-overlay"></div>
                                 <div class="position-absolute w-100 h-100 d-flex flex-column justify-content-between p-3">
@@ -294,7 +294,7 @@
                         <div class="col-md-6 col-lg-4">
                             <a href="{{ route('tour.show', $tour->slug) }}" class="text-decoration-none">
                                 <div class="ratio ratio-4x5 tour-card shadow-lg">
-                                    <div class="tour-bg" style="background-image: url('{{ $tour->primary_image_url }}');">
+                                    <div class="tour-bg" style="background-image: url('{{ $tour->primary_image_url }}'); content-visibility: auto;">
                                     </div>
                                     <div class="gradient-overlay"></div>
                                     <div
@@ -392,7 +392,7 @@
                                 <div class="experience-card flex-shrink-0">
                                     <a href="{{ route('tour.show', $experience->slug) }}" class="text-decoration-none">
                                         <div class="card-image-wrapper"
-                                            style="background-image: url('{{ $experience->primary_image_url }}');">
+                                            style="background-image: url('{{ $experience->primary_image_url }}'); content-visibility: auto;">
                                             <div class="gradient-overlay"></div>
                                             <div class="position-absolute bottom-0 start-0 p-4 text-white w-100">
                                                 <p class="small fw-bold text-uppercase opacity-75 mb-1 ls-widest">

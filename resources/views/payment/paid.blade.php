@@ -257,11 +257,11 @@
                                         <span>Go to My Bookings</span>
                                         <i class="material-icons">arrow_forward</i>
                                     </a>
-                                    <button onclick="window.print()"
+                                    <a href="{{ route('booking.receipt', $booking->id) }}" target="_blank"
                                         class="btn btn-outline-dark btn-lg rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2 py-3">
-                                        <i class="material-icons fs-5">print</i>
+                                        <i class="material-icons fs-5">receipt_long</i>
                                         <span>Print Receipt</span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

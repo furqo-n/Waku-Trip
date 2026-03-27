@@ -142,7 +142,7 @@
                         your journey.</p>
                 </div>
 
-                <div class="row g-5">
+                <div class="row g-5 justify-content-center">
                     <div class="col-sm-6 col-lg-3 text-center">
                         <div class="mx-auto team-img-wrapper">
                             <img src="{{ 'img/user_profile.png' }}" class="w-100 h-100 object-fit-cover"

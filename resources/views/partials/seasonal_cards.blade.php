@@ -3,7 +3,7 @@
         <a href="{{ route('tour.show', $tour->slug) }}" class="text-decoration-none">
             <div class="season-card">
                 <div class="season-bg"
-                    style="background-image:url('{{ $tour->primary_image_url }}');">
+                    style="background-image:url('{{ $tour->primary_image_url }}'); content-visibility: auto;">
                 </div>
                 <div class="season-overlay"></div>
 

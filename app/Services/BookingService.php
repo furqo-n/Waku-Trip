@@ -49,6 +49,9 @@ class BookingService
         BookingPassenger::create([
             'booking_id' => $booking->id,
             'name' => $bookingData['first_name'] . ' ' . $bookingData['last_name'],
+            'passport_number' => $bookingData['passport_number'] ?? null,
+            'date_of_birth' => $bookingData['date_of_birth'] ?? null,
+            'gender' => $bookingData['gender'] ?? null,
         ]);
 
         $schedule->decrement('available_seats', $bookingData['guests']);
@@ -93,5 +96,14 @@ class BookingService
             'travelerPhone' => $travelerPhone,
             'imageUrl' => $imageUrl,
         ];
+    }
+    public static function revertSeats(Booking $booking): void
+    {
+        $schedule = $booking->tripSchedule;
+        $schedule->increment('available_seats', $booking->pax_count);
+        
+        if ($schedule->fresh()->available_seats > 0 && $schedule->status === 'full') {
+            $schedule->update(['status' => 'scheduled']); // or whatever the default status is
+        }
     }
 }

@@ -1,0 +1,125 @@
+﻿
+storage\logs\laravel.log:1593:[2026-03-12 
+01:58:58] production.ERROR: PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 
+{"exception":"[object] (Psy\\Exception\\Pa
+rseErrorException(code: 0): PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 at 
+C:/xampp/htdocs/Laravel Web/vendor/psy/psy
+sh/src/Exception/ParseErrorException.php:4
+4)
+storage\logs\laravel.log:1617:[2026-03-12 
+01:59:30] production.ERROR: 
+SQLSTATE[42S22]: Column not found: 1054 
+Unknown column 'image_path' in 'where 
+clause' (Connection: mysql, Host: 
+127.0.0.1, Port: 3306, Database: 
+waku_trip, SQL: delete from 
+`package_images` where `image_path` LIKE 
+%unsplash%) {"exception":"[object] (Illumi
+nate\\Database\\QueryException(code: 
+42S22): SQLSTATE[42S22]: Column not 
+found: 1054 Unknown column 'image_path' 
+in 'where clause' (Connection: mysql, 
+Host: 127.0.0.1, Port: 3306, Database: 
+waku_trip, SQL: delete from 
+`package_images` where `image_path` LIKE 
+%unsplash%) at C:/xampp/htdocs/Laravel Web
+/vendor/laravel/framework/src/Illuminate/D
+atabase/Connection.php:838)
+storage\logs\laravel.log:1639:[2026-03-12 
+01:59:52] production.ERROR: 
+SQLSTATE[42S22]: Column not found: 1054 
+Unknown column 'image_path' in 'where 
+clause' (Connection: mysql, Host: 
+127.0.0.1, Port: 3306, Database: 
+waku_trip, SQL: delete from 
+`package_images` where `image_path` like 
+%unsplash%) {"exception":"[object] (Illumi
+nate\\Database\\QueryException(code: 
+42S22): SQLSTATE[42S22]: Column not 
+found: 1054 Unknown column 'image_path' 
+in 'where clause' (Connection: mysql, 
+Host: 127.0.0.1, Port: 3306, Database: 
+waku_trip, SQL: delete from 
+`package_images` where `image_path` like 
+%unsplash%) at C:/xampp/htdocs/Laravel Web
+/vendor/laravel/framework/src/Illuminate/D
+atabase/Connection.php:838)
+storage\logs\laravel.log:1659:[2026-03-12 
+02:02:23] production.ERROR: PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 
+{"exception":"[object] (Psy\\Exception\\Pa
+rseErrorException(code: 0): PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 at 
+C:/xampp/htdocs/Laravel Web/vendor/psy/psy
+sh/src/Exception/ParseErrorException.php:4
+4)
+storage\logs\laravel.log:1683:[2026-03-12 
+03:38:00] production.ERROR: PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 
+{"exception":"[object] (Psy\\Exception\\Pa
+rseErrorException(code: 0): PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 at 
+C:/xampp/htdocs/Laravel Web/vendor/psy/psy
+sh/src/Exception/ParseErrorException.php:4
+4)
+storage\logs\laravel.log:1707:[2026-03-12 
+03:39:16] production.ERROR: PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 
+{"exception":"[object] (Psy\\Exception\\Pa
+rseErrorException(code: 0): PHP Parse 
+error: Syntax error, unexpected 
+T_NS_SEPARATOR on line 1 at 
+C:/xampp/htdocs/Laravel Web/vendor/psy/psy
+sh/src/Exception/ParseErrorException.php:4
+4)
+storage\logs\laravel.log:1731:[2026-03-25 
+01:06:22] production.ERROR: Call to 
+undefined method App\Http\Controllers\Book
+ingController::authorize() 
+{"userId":6,"exception":"[object] 
+(Error(code: 0): Call to undefined method 
+App\\Http\\Controllers\\BookingController:
+:authorize() at C:/xampp/htdocs/Laravel We
+b/app/Http/Controllers/BookingController.p
+hp:85)
+storage\logs\laravel.log:1794:[2026-03-25 
+01:07:16] production.ERROR: Call to 
+undefined method App\Http\Controllers\Book
+ingController::authorize() 
+{"userId":6,"exception":"[object] 
+(Error(code: 0): Call to undefined method 
+App\\Http\\Controllers\\BookingController:
+:authorize() at C:/xampp/htdocs/Laravel We
+b/app/Http/Controllers/BookingController.p
+hp:85)
+storage\logs\laravel.log:1857:[2026-03-25 
+01:14:58] production.ERROR: Call to 
+undefined method App\Http\Controllers\Book
+ingController::authorize() 
+{"userId":2,"exception":"[object] 
+(Error(code: 0): Call to undefined method 
+App\\Http\\Controllers\\BookingController:
+:authorize() at C:/xampp/htdocs/Laravel We
+b/app/Http/Controllers/BookingController.p
+hp:122)
+storage\logs\laravel.log:1920:[2026-03-25 
+01:15:59] production.ERROR: Call to 
+undefined method App\Http\Controllers\Book
+ingController::authorize() 
+{"userId":2,"exception":"[object] 
+(Error(code: 0): Call to undefined method 
+App\\Http\\Controllers\\BookingController:
+:authorize() at C:/xampp/htdocs/Laravel We
+b/app/Http/Controllers/BookingController.p
+hp:122)
+
+

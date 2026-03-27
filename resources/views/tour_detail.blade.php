@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@section('page_title', $package->title . ' | Waku Trip Japan Tours')
-@section('meta_description', Str::limit(strip_tags($package->description ?? 'Discover ' . $package->title . ' – a curated Japan tour experience by Waku Trip. Book now and experience the beauty of ' . $package->location_text . '.'), 155))
-@include('partials.head')
+@php
+    $page_title = $package->title . ' | Waku Trip Japan Tours';
+    $meta_description = Str::limit(strip_tags($package->description ?? 'Discover ' . $package->title . ' – a curated Japan tour experience by Waku Trip.'), 155);
+@endphp
+@include('partials.head', ['page_title' => $page_title, 'meta_description' => $meta_description])
 
 <body class="bg-shape">
 
@@ -152,7 +154,7 @@
                         <span class="flex-fill bg-light rounded" style="height: 2px;"></span>
                     </h2>
                     <div class="text-secondary fs-5 lh-lg">
-                        <p class="mb-3">{!! $package->description !!}</p>
+                        <p class="mb-3">{!! clean($package->description) !!}</p>
                     </div>
                 </section>
 
@@ -162,33 +164,67 @@
                         <span class="flex-fill bg-light rounded" style="height: 2px;"></span>
                     </h2>
 
-                    <div class="timeline-wrapper">
-                        @foreach($package->itineraries as $itinerary)
-                            <div class="timeline-item group">
-                                <div class="row g-4">
-                                    <div class="col-md-8">
-                                        <span
-                                            class="badge {{ $loop->first ? 'bg-japan-red bg-opacity-10 text-white' : 'bg-light text-secondary border' }} mb-2">Day
-                                            {{ $itinerary->day_number }}</span>
-                                        <h4 class="fw-bold mb-2">{{ $itinerary->title }}</h4>
-                                        <p class="text-secondary mb-3">{{ $itinerary->description }}</p>
-                                    </div>
-                                    @if($itinerary->image_url)
-                                        <div class="col-md-4">
-                                            <img src="{{ $itinerary->image_url }}" class="img-fluid rounded-4 shadow-sm"
-                                                alt="Day {{ $itinerary->day_number }}" loading="lazy" decoding="async">
+                    <div class="accordion accordion-flush" id="itineraryAccordion">
+                        @foreach($package->itineraries as $index => $itinerary)
+                            <div class="accordion-item border-0 mb-3 bg-transparent itinerary-day-item {{ $index >= 3 ? 'd-none additional-day' : '' }}">
+                                <h3 class="accordion-header" id="heading-{{ $itinerary->id }}">
+                                    <button class="accordion-button {{ $index === 0 ? '' : 'collapsed' }} rounded-4 shadow-sm border border-soft bg-white px-4 py-3 d-flex align-items-center gap-3 hover-bg-light transition-all" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $itinerary->id }}" aria-expanded="{{ $index === 0 ? 'true' : 'false' }}" aria-controls="collapse-{{ $itinerary->id }}">
+                                        <div class="d-flex align-items-center gap-3 flex-grow-1">
+                                            <span class="badge {{ $index === 0 ? 'bg-japan-red text-white' : 'bg-light text-secondary border' }} fs-6 px-3 py-2 rounded-pill">
+                                                Day {{ $itinerary->day_number }}
+                                            </span>
+                                            <span class="h5 fw-bold mb-0 text-dark">{{ $itinerary->title }}</span>
                                         </div>
-                                    @endif
+                                    </button>
+                                </h3>
+                                <div id="collapse-{{ $itinerary->id }}" class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}" aria-labelledby="heading-{{ $itinerary->id }}" data-bs-parent="#itineraryAccordion">
+                                    <div class="accordion-body px-4 py-4 ms-3 ms-md-5 border-start border-2 border-danger border-opacity-25 mt-2">
+                                        <div class="row g-4">
+                                            <div class="col-md-{{ $itinerary->image_url ? '8' : '12' }}">
+                                                <ul class="list-unstyled d-flex flex-column gap-3 mb-0">
+                                                    @php
+                                                        $itineraryItems = $itinerary->items->count() > 0 
+                                                            ? $itinerary->items 
+                                                            : collect(explode("\n", $itinerary->description))
+                                                                ->map(fn($l) => trim($l))
+                                                                ->filter()
+                                                                ->map(fn($l) => (object)['content' => $l, 'image_url' => null]);
+                                                    @endphp
+                                                    
+                                                    @foreach($itineraryItems as $item)
+                                                        <li class="d-flex flex-column gap-2 text-secondary mb-2">
+                                                            <div class="d-flex gap-3 align-items-start">
+                                                                <span class="material-symbols-outlined text-japan-red fs-5 mt-1">location_on</span>
+                                                                <div class="lh-lg itinerary-item-content">{!! clean($item->content) !!}</div>
+                                                            </div>
+                                                            @if(!empty($item->image_url))
+                                                                <div class="ms-5 ps-1 mt-1">
+                                                                    <img src="{{ $item->image_url }}" 
+                                                                        class="img-fluid rounded-3 shadow-sm border border-light" 
+                                                                        style="max-height: 200px; width: auto;" 
+                                                                        alt="Activity" loading="lazy">
+                                                                </div>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                            @if($itinerary->image_url)
+                                                <div class="col-md-4">
+                                                    <img src="{{ $itinerary->image_url }}" class="img-fluid rounded-4 shadow-sm object-fit-cover w-100" style="max-height: 250px;" alt="Day {{ $itinerary->day_number }}" loading="lazy" decoding="async">
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
 
                     @if($package->itineraries->count() > 3)
-                        <div class="ps-5 pt-3">
-                            <button
-                                class="btn btn-link text-japan-red fw-bold text-decoration-none d-flex align-items-center gap-2 p-0">
-                                View full detailed itinerary <span class="material-symbols-outlined">expand_more</span>
+                        <div class="ps-3 pt-3 text-center">
+                            <button id="toggle-itinerary-btn" class="btn btn-outline-danger fw-bold rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 transition-all">
+                                <span>Show full detailed itinerary</span> <span class="material-symbols-outlined">expand_more</span>
                             </button>
                         </div>
                     @endif
@@ -261,12 +297,12 @@
                         <div class="d-flex align-items-end gap-2 mb-2">
                             <span class="small text-secondary fw-bold mb-1">From</span>
                             <h2 id="display-price" class="fw-black text-japan-red mb-0">
-                                {{ convert_currency($package->tripSchedules->where('status', 'available')->first()?->price ?? $package->base_price) }}
+                                {{ convert_currency($startingPrice) }}
                             </h2>
                             <span class="small text-secondary fw-bold mb-1">{{ $currentCurrency }} / person</span>
                         </div>
 
-                        @if($package->tripSchedules->count() > 0)
+                        @if($availableSchedules->count() > 0)
                             <span
                                 class="badge bg-success bg-opacity-10 text-success d-inline-flex align-items-center gap-1">
                                 <span class="material-symbols-outlined fs-6">savings</span> Best price dates available
@@ -278,12 +314,14 @@
                         {{-- Open Group / Private Toggle --}}
                         <div class="bg-light p-1 rounded-pill d-flex" id="trip-type-toggle">
                             <button type="button" data-type="open"
-                                class="btn-trip-type btn {{ $package->type == 'open' ? 'btn-white shadow-sm' : 'btn-transparent text-secondary' }} rounded-pill flex-fill fw-bold small">
+                                class="btn-trip-type btn {{ $package->type == 'open' ? 'btn-white shadow-sm' : 'btn-transparent text-secondary' }} rounded-pill flex-fill fw-bold small"
+                                {{ in_array($package->type, ['private', 'activity']) ? 'disabled style=opacity:0.5;cursor:not-allowed;' : '' }}>
                                 Open Group
                             </button>
                             <button type="button" data-type="private"
-                                class="btn-trip-type btn {{ $package->type == 'private' ? 'btn-white shadow-sm' : 'btn-transparent text-secondary' }} rounded-pill flex-fill fw-bold small">
-                                Private
+                                class="btn-trip-type btn {{ in_array($package->type, ['private', 'activity']) ? 'btn-white shadow-sm' : 'btn-transparent text-secondary' }} rounded-pill flex-fill fw-bold small"
+                                {{ $package->type == 'open' ? 'disabled style=opacity:0.5;cursor:not-allowed;' : '' }}>
+                                {{ $package->type == 'activity' ? 'Activity' : 'Private' }}
                             </button>
                         </div>
 
@@ -296,7 +334,7 @@
                                     <span class="material-symbols-outlined text-japan-red">calendar_month</span>
                                 </span>
                                 <select id="schedule-select" class="form-select bg-light border-soft fw-bold text-dark">
-                                    @forelse($package->tripSchedules->where('status', 'available') as $schedule)
+                                    @forelse($availableSchedules as $schedule)
                                         <option value="{{ $schedule->id }}" data-price="{{ $schedule->price }}"
                                             data-seats="{{ $schedule->available_seats }}">
                                             {{ $schedule->start_date->format('M d') }} -
@@ -347,9 +385,9 @@
                     </div>
 
                     <a href="{{ url('/order') }}" id="btn-book-now"
-                        class="btn btn-japan w-100 py-3 rounded-pill fw-bold fs-5 shadow hover-scale d-flex align-items-center justify-content-center gap-2 {{ $package->tripSchedules->where('status', 'available')->count() == 0 ? 'disabled' : '' }}"
+                        class="btn btn-japan w-100 py-3 rounded-pill fw-bold fs-5 shadow hover-scale d-flex align-items-center justify-content-center gap-2 {{ $availableSchedules->isEmpty() ? 'disabled' : '' }}"
                         role="button"
-                        aria-disabled="{{ $package->tripSchedules->where('status', 'available')->count() == 0 ? 'true' : 'false' }}">
+                        aria-disabled="{{ $availableSchedules->isEmpty() ? 'true' : 'false' }}">
                         Book Now <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
 
@@ -375,6 +413,27 @@
             </aside>
         </div>
     </main>
+ 
+    {{-- Floating Mobile Booking Bar --}}
+    <div class="fixed-bottom bg-white border-top d-lg-none p-3 shadow-lg-up z-index-content">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div>
+                    <span class="d-block text-secondary small fw-bold text-uppercase" style="font-size: 10px;">{{ in_array($package->type, ['private', 'activity']) ? 'Private/Activity' : 'Open Group' }}</span>
+                    <div class="d-flex align-items-baseline gap-1 mt-n1">
+                        <h4 class="fw-black text-japan-red mb-0" id="mobile-display-price">
+                             {{ convert_currency($startingPrice) }}
+                        </h4>
+                        <span class="small text-secondary fw-bold" style="font-size: 11px;">/ person</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-japan px-4 py-2 rounded-pill fw-bold shadow-sm d-flex align-items-center gap-2" 
+                    onclick="document.querySelector('.sticky-booking').scrollIntoView({behavior: 'smooth'});">
+                    Book Now <span class="material-symbols-outlined fs-6">expand_less</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!--================ Footer Area start =================-->
     @include('partials.footer')
@@ -398,34 +457,6 @@
 
             let guests = 1;
             let selectedType = '{{ $package->type }}';
-
-            const currencyConfig = {
-                code: '{{ $currentCurrency }}',
-                symbol: '{{ $currencySymbol }}',
-                rate: {{ $currencyRate }}
-            };
-
-            // === Helper: Format currency ===
-            function formatCurrency(amount) {
-                const converted = amount * currencyConfig.rate;
-                let formatted;
-
-                if (currencyConfig.code === 'IDR' || currencyConfig.code === 'JPY') {
-                    formatted = Math.round(converted).toLocaleString('en-US'); // No decimals
-                } else {
-                    formatted = converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                }
-
-                // Replace comma with dot for IDR usually, but let's stick to standard US locale for numbers and just prepend symbol for simplicity, 
-                // OR match the PHP side:
-                if (currencyConfig.code === 'IDR') {
-                    formatted = Math.round(converted).toLocaleString('id-ID');
-                } else if (currencyConfig.code === 'JPY') {
-                    formatted = Math.round(converted).toLocaleString('ja-JP');
-                }
-
-                return currencyConfig.symbol + ' ' + formatted;
-            }
 
             // === Get selected schedule data ===
             function getSelectedSchedule() {
@@ -453,13 +484,19 @@
                     const total = price * guests;
 
                     // Update UI prices
-                    displayPrice.textContent = formatCurrency(price);
-                    totalPrice.textContent = formatCurrency(total);
-                    priceDetailLabel.textContent = formatCurrency(price) + ' × ' + guests + (guests === 1 ? ' guest' : ' guests');
-                    priceDetailValue.textContent = formatCurrency(total);
+                    const formattedPrice = window.WakuCurrency.format(price);
+                    const formattedTotal = window.WakuCurrency.format(total);
+
+                    displayPrice.textContent = formattedPrice;
+                    if(document.getElementById('mobile-display-price')) {
+                        document.getElementById('mobile-display-price').textContent = formattedPrice;
+                    }
+                    totalPrice.textContent = formattedTotal;
+                    priceDetailLabel.textContent = `${formattedPrice} × ${guests} ${guests === 1 ? 'guest' : 'guests'}`;
+                    priceDetailValue.textContent = formattedTotal;
 
                     // Update Book Now link with query params
-                    const orderUrl = `{{ url('/order') }}?schedule_id=${schedule.id}&guests=${guests}&total=${total}`;
+                    const orderUrl = `{{ url('/order') }}?schedule_id=${schedule.id}&guests=${guests}`;
                     btnBookNow.href = orderUrl;
                     btnBookNow.classList.remove('disabled');
                     btnBookNow.setAttribute('aria-disabled', 'false');
@@ -469,10 +506,10 @@
                     guestPlus.disabled = (guests >= schedule.seats);
                 } else {
                     // No valid schedule selected
-                    displayPrice.textContent = formatCurrency({{ $package->tripSchedules->where('status', 'available')->first()?->price ?? $package->base_price }});
-                    totalPrice.textContent = currencyConfig.symbol + '0';
+                    displayPrice.textContent = window.WakuCurrency.format({{ $startingPrice }});
+                    totalPrice.textContent = `${window.WakuCurrency.symbol} 0`;
                     priceDetailLabel.textContent = 'No date selected';
-                    priceDetailValue.textContent = currencyConfig.symbol + '0';
+                    priceDetailValue.textContent = `${window.WakuCurrency.symbol} 0`;
                     btnBookNow.href = '#';
                     btnBookNow.classList.add('disabled');
                     btnBookNow.setAttribute('aria-disabled', 'true');
@@ -670,6 +707,31 @@
             if (carouselEl) {
                 carouselEl.addEventListener('slide.bs.carousel', function (e) {
                     updateActiveThumb(e.to);
+                });
+            }
+
+            // Itinerary toggle logic
+            const toggleItineraryBtn = document.getElementById('toggle-itinerary-btn');
+            if (toggleItineraryBtn) {
+                toggleItineraryBtn.addEventListener('click', function() {
+                    const additionalDays = document.querySelectorAll('.additional-day');
+                    const isExpanded = toggleItineraryBtn.classList.contains('expanded');
+                    
+                    additionalDays.forEach(day => {
+                        if (isExpanded) {
+                            day.classList.add('d-none');
+                        } else {
+                            day.classList.remove('d-none');
+                        }
+                    });
+
+                    if (isExpanded) {
+                        toggleItineraryBtn.classList.remove('expanded');
+                        toggleItineraryBtn.innerHTML = '<span>Show full detailed itinerary</span> <span class="material-symbols-outlined">expand_more</span>';
+                    } else {
+                        toggleItineraryBtn.classList.add('expanded');
+                        toggleItineraryBtn.innerHTML = '<span>Show less detailed itinerary</span> <span class="material-symbols-outlined">expand_less</span>';
+                    }
                 });
             }
         });

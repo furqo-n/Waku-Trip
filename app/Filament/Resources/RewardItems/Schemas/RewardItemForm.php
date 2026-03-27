@@ -21,11 +21,16 @@ class RewardItemForm
                 Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
-                TextInput::make('image')
-                    ->label('Image URL')
-                    ->url()
-                    ->maxLength(500)
-                    ->placeholder('https://example.com/image.jpg'),
+                FileUpload::make('image')
+                    ->image()
+                    ->disk('cloudinary')
+                    ->directory('rewards')
+                    ->afterStateHydrated(function (FileUpload $component, $record) {
+                        if ($record && $media = $record->getFirstMedia('reward_image')) {
+                            $component->state($media->public_id);
+                        }
+                    })
+                    ->columnSpanFull(),
                 TextInput::make('points_cost')
                     ->required()
                     ->numeric()

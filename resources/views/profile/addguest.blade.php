@@ -24,8 +24,8 @@
                     <h2 class="fw-bold text-dark">Manage Guests</h2>
                     <p class="text-secondary">Add details for your travel companions.</p>
                 </div>
-                <a href="{{ route('mybooking') }}" class="btn btn-outline-secondary rounded-3">
-                    <i class="material-icons align-middle me-1">arrow_back</i> Back to Bookings
+                <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-3">
+                    <i class="material-icons align-middle me-1">arrow_back</i> Back
                 </a>
             </div>
 

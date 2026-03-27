@@ -95,21 +95,9 @@
         style="letter-spacing: 0.1em;">Budget Range</h6>
     
     <script>
-        if (typeof window.dailyBudgetRate === 'undefined') {
-            window.dailyBudgetRate = {{ config("currency.currencies.{$currentCurrency}.rate", 1) }};
-            window.dailyBudgetSymbol = "{{ $currencySymbol }}";
-            window.dailyBudgetCode = "{{ $currentCurrency }}";
-            
+        if (typeof window.formatBudgetDisplay === 'undefined') {
             window.formatBudgetDisplay = function(usdAmount) {
-                let converted = usdAmount * window.dailyBudgetRate;
-                let formatted;
-                
-                if (window.dailyBudgetCode === 'IDR' || window.dailyBudgetCode === 'JPY') {
-                     formatted = Math.round(converted).toLocaleString('en-US');
-                } else {
-                     formatted = converted.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                }
-                return window.dailyBudgetSymbol + ' ' + formatted;
+                return window.WakuCurrency.format(usdAmount);
             }
         }
     </script>

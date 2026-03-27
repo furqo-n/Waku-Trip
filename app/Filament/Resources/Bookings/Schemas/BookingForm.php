@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Bookings\Schemas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\DatePicker;
+use Filament\Schemas\Components as SchemaComponents;
 use Filament\Schemas\Schema;
 
 class BookingForm
@@ -49,6 +52,31 @@ class BookingForm
                     ->required(),
                 Textarea::make('special_requests')
                     ->default(null)
+                    ->columnSpanFull(),
+                SchemaComponents\Section::make('Guest Details')
+                    ->description('List of travel companions for this booking.')
+                    ->schema([
+                        Repeater::make('passengers')
+                            ->relationship('passengers')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->required(),
+                                TextInput::make('passport_number')
+                                    ->nullable(),
+                                DatePicker::make('date_of_birth')
+                                    ->required(),
+                                Select::make('gender')
+                                    ->options([
+                                        'male' => 'Male',
+                                        'female' => 'Female',
+                                        'other' => 'Other',
+                                    ])
+                                    ->required(),
+                            ])
+                            ->columns(2)
+                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                            ->collapsible()
+                    ])
                     ->columnSpanFull(),
             ]);
     }

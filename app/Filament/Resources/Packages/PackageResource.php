@@ -241,7 +241,78 @@ class PackageResource extends Resource
                                                 if ($record && $media = $record->getFirstMedia('primary_image')) {
                                                     $component->state($media->public_id);
                                                 }
+                                            })
+                                            ->dehydrated(false)
+                                            ->saveRelationshipsUsing(function ($record, $state) {
+                                                if (empty($state)) {
+                                                    $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+                                                    return;
+                                                }
+
+                                                $cloudName = config('filesystems.disks.cloudinary.cloud');
+                                                $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+
+                                                $media = \App\Models\MediaAsset::firstOrCreate(
+                                                    ['public_id' => $state],
+                                                    [
+                                                        'url' => "https://res.cloudinary.com/{$cloudName}/image/upload/{$state}",
+                                                        'status' => 'permanent'
+                                                    ]
+                                                );
+
+                                                $record->media()->attach($media->id, ['collection_name' => 'primary_image']);
                                             }),
+                                        Forms\Components\Repeater::make('items')
+                                            ->relationship()
+                                            ->schema([
+                                                Forms\Components\RichEditor::make('content')
+                                                    ->required()
+                                                    ->columnSpanFull()
+                                                    ->disableToolbarButtons([
+                                                        'attachFiles',
+                                                        'codeBlock',
+                                                    ]),
+                                                Forms\Components\Hidden::make('order'),
+                                                Forms\Components\FileUpload::make('image_path')
+                                                    ->image()
+                                                    ->disk('cloudinary')
+                                                    ->directory('itineraries')
+                                                    ->maxSize(8192)
+                                                    ->imageResizeTargetWidth(1024)
+                                                    ->imageResizeTargetHeight(768)
+                                                    ->imageResizeMode('cover')
+                                                    ->columnSpanFull()
+                                                    ->afterStateHydrated(function (Forms\Components\FileUpload $component, $record) {
+                                                        if ($record && $media = $record->getFirstMedia('primary_image')) {
+                                                            $component->state($media->public_id);
+                                                        }
+                                                    })
+                                                    ->dehydrated(false)
+                                                    ->saveRelationshipsUsing(function ($record, $state) {
+                                                        if (empty($state)) {
+                                                            $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+                                                            return;
+                                                        }
+
+                                                        $cloudName = config('filesystems.disks.cloudinary.cloud');
+                                                        $record->media()->wherePivot('collection_name', 'primary_image')->detach();
+
+                                                        $media = \App\Models\MediaAsset::firstOrCreate(
+                                                            ['public_id' => $state],
+                                                            [
+                                                                'url' => "https://res.cloudinary.com/{$cloudName}/image/upload/{$state}",
+                                                                'status' => 'permanent'
+                                                            ]
+                                                        );
+
+                                                        $record->media()->attach($media->id, ['collection_name' => 'primary_image']);
+                                                    }),
+                                            ])
+                                            ->addActionLabel('Add Detail Activity')
+                                            ->orderColumn('order')
+                                            ->defaultItems(0)
+                                            ->columns(12)
+                                            ->collapsed(),
                                     ])
                                     ->orderColumn('day_number')
                                     ->defaultItems(1)

@@ -2,6 +2,9 @@
 <html lang="en">
 
 @include('partials.head')
+<script type="text/javascript"
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 
 <style>
     :root {
@@ -247,114 +250,27 @@
                 <!-- Payment Method Card -->
                 <div class="checkout-card p-4">
                     <div class="d-flex align-items-center mb-4 text-danger">
-                        <span class="material-icons card-header-icon">payments</span>
-                        <h4 class="m-0 fw-bold text-dark">Payment Method</h4>
+                        <span class="material-icons card-header-icon">lock</span>
+                        <h4 class="m-0 fw-bold text-dark">Secure Payment</h4>
                     </div>
 
-                    <!-- Express Checkout -->
-                    <div class="mb-4">
-                        <label class="form-label small text-uppercase fw-bold text-secondary mb-3"
-                            style="letter-spacing: 1px;">Quick Checkout</label>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <button
-                                    class="btn btn-dark w-100 py-3 d-flex align-items-center justify-content-center gap-2"
-                                    style="border-radius: 12px;">
-                                    <span class="fw-bold">Apple Pay</span>
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <button
-                                    class="btn btn-outline-dark w-100 py-3 d-flex align-items-center justify-content-center gap-2"
-                                    style="border-radius: 12px;">
-                                    <img alt="Google"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzUpFkwSLI1q4FvG9dF2qD6-h6svKBy0UDHHxWWNi9oIp9XY-W2SqBpg_O-9cXoqDNd636BCnwtDmVPa8FKbtWFMXimOXXLiDqp4V_hQXDYNZGoHgePBYgZ18ANzbUvkZ5uC_yFQK5v4NRIPKcjOUdyHJ82PcG78glQ6qtyZRak4Yu91whQWCNGZLlFTpomfDS0alVLvXVoY7y_e55mmRFjieKVpQ8jKDE8xYgdP3X8cK4VReDmmt5mUv6KuYktrRR75rKrB74YH8"
-                                        style="height: 18px;" />
-                                    <span class="fw-bold">Pay</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="position-relative my-4">
-                        <hr class="border-secondary opacity-25">
-                        <span
-                            class="position-absolute top-50 start-50 translate-middle bg-white px-3 small text-secondary text-uppercase fw-bold"
-                            style="letter-spacing: 1px;">Or pay with card</span>
-                    </div>
-
-                    <!-- Credit Card Option -->
-                    <div class="payment-option selected mb-3" onclick="selectPayment(this)">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div class="d-flex align-items-center">
-                                <div class="custom-radio"></div>
-                                <span class="fw-bold fs-5">Credit or Debit Card</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 bg-light px-3 py-1 rounded-3 border">
-                                <img alt="Visa"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJvMLwg8K7QDuvdXfuGLSo4OA7RVYGOfdyo2qlVn0npsIOAVx_BRYlL6eWG2uZSWPJj4qYF3AtbhbgUDJDiaf_JVainzDGMukrRmb43sq2XSXOzKIHI85hagjbLvAJICoDoZsHbTIHD1wwU1DxZh9dM_bAGyC4mtYdgdbPYKS1e5F_qLit79vYQ7pnSabLIMSUpGMo9jXjqHuVhrmibvJvD4_EfpRy4ijo-kR7U8q01J0cnZiC7FpCOL_3af9yl3oyvCJQJSot6BI"
-                                    style="height: 20px;" />
-                                <img alt="Mastercard"
-                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0mD7pJO-K1Jiv3ugQfICUBzjJhlZlX1ohNWHZtoDXA2OtPCk7bBobgkue77K2ZZuAzQmTaUjQ9goHFb5lpxbpadIyBr45g-lFTGWMY9GNnaCogtlkrw-bFKNdoZC5dZaUqOSLT1vdzsKRATY1jUQaNAFS_Shn1i1VuM4sfIzC5lUhsKTm3HBghdXcxZCvg8ixuhZzRTtnDsafqpvV63uqPWYRjSYFC0EjsgWyCV_kU2N7mMwYSIGacIwBf2dgZoYmiWgWcFsOIAE"
-                                    style="height: 20px;" />
-                                <div class="text-white rounded px-2 d-flex align-items-center fw-bold"
-                                    style="font-size: 9px; background-color: #1a4399;">JCB</div>
-                            </div>
-                        </div>
-
-                        <!-- Card Fields -->
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label small text-uppercase fw-bold text-secondary">Card
-                                    Number</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0">
-                                        <i class="material-icons"
-                                            style="font-size: 20px; color: var(--primary-color);">credit_card</i>
-                                    </span>
-                                    <input type="text" class="form-control border-start-0 ps-0"
-                                        placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242">
-                                    <span class="input-group-text bg-white">
-                                        <i class="material-icons text-success" style="font-size: 18px;">check_circle</i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small text-uppercase fw-bold text-secondary">Expiry
-                                    Date</label>
-                                <input type="text" class="form-control" placeholder="MM / YY">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small text-uppercase fw-bold text-secondary">CVC</label>
-                                <div class="position-relative">
-                                    <input type="password" class="form-control" placeholder="•••">
-                                    <i class="material-icons text-secondary position-absolute"
-                                        style="font-size: 18px; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer;">help</i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Other Wallets Option -->
-                    <div class="payment-option mb-3" onclick="selectPayment(this)">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <div class="custom-radio"></div>
-                                <span class="fw-bold text-secondary">Other Digital Wallets</span>
-                            </div>
-                            <div class="d-flex gap-2 opacity-50">
-                                <span class="badge bg-primary px-2 py-1 fw-bold" style="font-size: 10px;">PayPal</span>
-                                <span class="badge bg-dark px-2 py-1 fw-bold" style="font-size: 10px;">Alipay</span>
-                            </div>
-                        </div>
+                    <div class="text-center py-5 rounded bg-light border border-dashed mb-4">
+                       <div class="mb-3">
+                           <img src="https://snap.midtrans.com/v2/assets/midtrans-logo-8ecb74737dca9ceea9d20c2bba8e780def421bfcaeb2b4b459bb6e23caea4342.svg" alt="Midtrans" style="height: 40px; margin-bottom: 1rem;">
+                       </div>
+                       <h5 class="fw-bold text-dark">Pay Securely with Midtrans</h5>
+                       <p class="text-secondary mb-4 mx-auto" style="max-width: 400px;">Click the button below to open the secure payment window. You can pay using Credit Card, Virtual Account, or E-Wallets.</p>
+                       <button id="pay-button" class="btn btn-primary-custom px-5 py-3 d-inline-flex align-items-center gap-2" style="width: auto;">
+                           <span class="fw-bold fs-5">Pay Now</span>
+                           <i class="material-icons">arrow_forward</i>
+                       </button>
                     </div>
 
                     <!-- Security Notice -->
-                    <div class="d-flex align-items-start gap-3 p-3 bg-light rounded-3 mt-4">
+                    <div class="d-flex align-items-start gap-3 p-3 bg-white border rounded-3">
                         <i class="material-icons text-success" style="font-size: 22px;">verified_user</i>
                         <p class="small text-secondary mb-0">Your payment information is encrypted and securely
-                            processed. We do not store your full card details.</p>
+                            processed by Midtrans. Waku Trip does not store your full card details.</p>
                     </div>
                 </div>
             </div>
@@ -412,14 +328,7 @@
                                 </div>
                             </div>
 
-                            <form id="payment-form" method="POST" action="{{ url('/pay') }}">
-                                @csrf
-                            </form>
-                            <button type="submit" form="payment-form"
-                                class="btn btn-primary-custom mt-4 d-flex align-items-center justify-content-center gap-2 shadow-sm">
-                                <span>Complete Booking</span>
-                                <i class="material-icons" style="font-size: 18px;">lock</i>
-                            </button>
+                            {{-- Midtrans Snap Embed doesn't strictly need this button if it renders its own --}}
                         </div>
                     </div>
 
@@ -461,10 +370,27 @@
     <!--================ Footer Area =================-->
 
     <script>
-        function selectPayment(el) {
-            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
-            el.classList.add('selected');
-        }
+        const payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', function () {
+            // Trigger snap popup
+            window.snap.pay('{{ $snapToken }}', {
+                onSuccess: function (result) {
+                    window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
+                    console.log(result);
+                },
+                onPending: function (result) {
+                    window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
+                    console.log(result);
+                },
+                onError: function (result) {
+                    alert("Payment failed or encountered an error.");
+                    console.log(result);
+                },
+                onClose: function () {
+                    console.log('User closed the popup without finishing the payment');
+                }
+            });
+        });
     </script>
 
 </body>

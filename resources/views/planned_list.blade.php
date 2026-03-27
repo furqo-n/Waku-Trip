@@ -86,7 +86,7 @@
         <main class="col-lg-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <p class="mb-0 fw-black text-secondary text-uppercase small" style="letter-spacing: 0.1em;">
-                    {{ $packages->count() }}
+                    {{ $packages->total() }}
                     Selected Experiences
                 </p>
                 <div class="d-none d-sm-flex align-items-center gap-2">
@@ -187,24 +187,51 @@
                 @endforelse
             </div>
 
-            <div class="d-flex justify-content-center mt-4 mt-md-5 gap-2">
-                <button
-                    class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary"
-                    style="width: 44px; height: 44px;">
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button
-                    class="btn btn-japan rounded-circle fw-black d-flex align-items-center justify-content-center shadow"
-                    style="width: 44px; height: 44px;">1</button>
-                <button
-                    class="btn glass-panel rounded-circle fw-black text-secondary d-flex align-items-center justify-content-center shadow-sm"
-                    style="width: 44px; height: 44px;">2</button>
-                <button
-                    class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary"
-                    style="width: 44px; height: 44px;">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-            </div>
+            {{-- Custom Pagination --}}
+            @if ($packages->hasPages())
+                <div class="d-flex justify-content-center mt-4 mt-md-5 gap-2">
+                    {{-- Previous Page Link --}}
+                    @if ($packages->onFirstPage())
+                        <button class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary opacity-50" style="width: 44px; height: 44px;" disabled>
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                    @else
+                        <a href="{{ $packages->previousPageUrl() }}" class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary" style="width: 44px; height: 44px;">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </a>
+                    @endif
+
+                    {{-- Pagination Elements --}}
+                    @foreach ($packages->links()->elements as $element)
+                        {{-- "Three Dots" Separator --}}
+                        @if (is_string($element))
+                            <button class="btn glass-panel rounded-circle fw-black text-secondary d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;" disabled>{{ $element }}</button>
+                        @endif
+
+                        {{-- Array Of Links --}}
+                        @if (is_array($element))
+                            @foreach ($element as $page => $url)
+                                @if ($page == $packages->currentPage())
+                                    <button class="btn btn-japan rounded-circle fw-black d-flex align-items-center justify-content-center shadow" style="width: 44px; height: 44px;">{{ $page }}</button>
+                                @else
+                                    <a href="{{ $url }}" class="btn glass-panel rounded-circle fw-black text-secondary d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">{{ $page }}</a>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                    {{-- Next Page Link --}}
+                    @if ($packages->hasMorePages())
+                        <a href="{{ $packages->nextPageUrl() }}" class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary" style="width: 44px; height: 44px;">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </a>
+                    @else
+                        <button class="btn glass-panel rounded-circle d-flex align-items-center justify-content-center shadow-sm text-secondary opacity-50" style="width: 44px; height: 44px;" disabled>
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    @endif
+                </div>
+            @endif
         </main>
     </div>
     </div>

@@ -24,10 +24,18 @@ class TourController extends Controller
             ])
             ->firstOrFail();
 
-        // Calculate average rating if needed (though you might want to cache this or use a package)
+        // Pre-calculate view data to avoid logic in Blade
+        $availableSchedules = $package->tripSchedules;
+        $startingPrice = $availableSchedules->first()?->price ?? $package->base_price;
         $averageRating = $package->reviews()->avg('rating') ?? 0;
         $reviewCount = $package->reviews()->count();
 
-        return view('tour_detail', compact('package', 'averageRating', 'reviewCount'));
+        return view('tour_detail', compact(
+            'package', 
+            'averageRating', 
+            'reviewCount', 
+            'availableSchedules', 
+            'startingPrice'
+        ));
     }
 }

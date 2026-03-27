@@ -57,7 +57,7 @@ class PlannedTripController extends Controller
         }
         
         
-        $packages = $query->orderBy('created_at', 'desc')->get();
+        $packages = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
         
         $selectedTripTypes = $tripTypes;
         $selectedSeasons = $seasons;

@@ -3,10 +3,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description"
-        content="@yield('meta_description', 'Waku Trip – Discover Japan like never before. Explore curated tours, private experiences, and seasonal adventures across Tokyo, Kyoto, Osaka, and beyond.')">
-    <title>@yield('page_title', 'Waku Trip - Discover the Soul of Japan')</title>
+        content="{{ $meta_description ?? $__env->yieldContent('meta_description', 'Waku Trip – Discover Japan like never before. Explore curated tours, private experiences, and seasonal adventures across Tokyo, Kyoto, Osaka, and beyond.') }}">
+    <title>{{ $page_title ?? $__env->yieldContent('page_title', 'Waku Trip - Discover the Soul of Japan') }}</title>
     <link rel="icon" href="{{ asset('img/Asset 2.png') }}" type="image/png">
     <link rel="canonical" href="{{ url()->current() }}">
+    @include('partials.currency_init')
 
     <!-- Template Styles (Legacy) -->
     <!-- <link rel="stylesheet" href="{{ asset('vendors/bootstrap/bootstrap.min.css') }}"

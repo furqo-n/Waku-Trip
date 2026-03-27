@@ -8,6 +8,7 @@ use App\Models\BookingPassenger;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class BookingController extends Controller
@@ -54,15 +55,44 @@ class BookingController extends Controller
             ->where('id', $id)
             ->firstOrFail();
 
-        $this->authorize('view', $booking);
+        Gate::authorize('view', $booking);
 
         return view('profile.managebook', compact('booking'));
+    }
+
+    public function receipt(string $id): View
+    {
+        $booking = Booking::with([
+            'passengers',
+            'payment',
+            'tripSchedule.package.media',
+            'tripSchedule.package.inclusions',
+            'user'
+        ])
+            ->where('id', $id)
+            ->firstOrFail();
+
+        Gate::authorize('view', $booking);
+
+        $schedule = $booking->tripSchedule;
+        $pricePerPerson = $schedule->price;
+        $basePrice = $pricePerPerson * $booking->pax_count;
+        $ppn = $basePrice * config('pricing.tax_rate', 0.12);
+        $fee = $basePrice * config('pricing.fee_rate', 0.10);
+        $discount = $basePrice * config('pricing.discount_rate', 0.07);
+        $durationDays = Carbon::parse($schedule->start_date)->diffInDays(Carbon::parse($schedule->end_date)) + 1;
+        $imageUrl = $schedule->package->primary_image_url;
+
+        return view('profile.receipt', compact(
+            'booking', 'schedule', 'pricePerPerson', 'basePrice',
+            'ppn', 'fee', 'discount', 'durationDays', 'imageUrl'
+        ));
     }
 
     public function cancel(string $id): RedirectResponse
     {
         $booking = Booking::findOrFail($id);
-        $this->authorize('cancel', $booking);
+        Gate::authorize('cancel', $booking);
 
         if ($booking->status !== 'pending') {
             return back()->with('error', 'Only pending bookings can be cancelled.');
@@ -82,7 +112,7 @@ class BookingController extends Controller
     public function pay(string $id): RedirectResponse
     {
         $booking = Booking::where('status', 'pending')->findOrFail($id);
-        $this->authorize('pay', $booking);
+        Gate::authorize('pay', $booking);
 
         $booking->update(['status' => 'paid']);
 
@@ -119,7 +149,7 @@ class BookingController extends Controller
         $booking = Booking::with(['passengers', 'tripSchedule.package'])
             ->findOrFail($id);
 
-        $this->authorize('manageGuests', $booking);
+        Gate::authorize('manageGuests', $booking);
 
         return view('profile.addguest', compact('booking'));
     }
@@ -127,7 +157,7 @@ class BookingController extends Controller
     public function storeGuest(StoreGuestRequest $request, string $id): RedirectResponse
     {
         $booking = Booking::findOrFail($id);
-        $this->authorize('manageGuests', $booking);
+        Gate::authorize('manageGuests', $booking);
 
         if ($booking->passengers()->count() >= $booking->pax_count) {
             return back()->with('error', 'Maximum number of guests reached for this booking.');
@@ -141,10 +171,49 @@ class BookingController extends Controller
     public function destroyGuest(string $guestId): RedirectResponse
     {
         $guest = BookingPassenger::with('booking')->findOrFail($guestId);
-        $this->authorize('delete', $guest);
+        Gate::authorize('delete', $guest);
 
         $guest->delete();
 
         return back()->with('success', 'Guest removed.');
+    }
+
+    public function downloadTicket(string $bookingId, string $passengerId): View|RedirectResponse
+    {
+        $booking = Booking::with([
+            'passengers',
+            'tripSchedule.package.media',
+        ])->findOrFail($bookingId);
+
+        Gate::authorize('view', $booking);
+
+        if ($booking->status !== 'confirmed') {
+            return back()->with('error', 'Tickets are only available for confirmed bookings.');
+        }
+
+        $passenger = $booking->passengers()->findOrFail($passengerId);
+
+        // Determine passenger index for ticket number
+        $passengerIndex = $booking->passengers->search(fn($p) => $p->id === $passenger->id);
+
+        return view('profile.ticket', compact('booking', 'passenger', 'passengerIndex'));
+    }
+
+    public function downloadAllTickets(string $bookingId): View|RedirectResponse
+    {
+        $booking = Booking::with([
+            'passengers',
+            'tripSchedule.package.media',
+        ])->findOrFail($bookingId);
+
+        Gate::authorize('view', $booking);
+
+        if ($booking->status !== 'confirmed') {
+            return back()->with('error', 'Tickets are only available for confirmed bookings.');
+        }
+
+        $passengers = $booking->passengers;
+
+        return view('profile.ticket', compact('booking', 'passengers'));
     }
 }

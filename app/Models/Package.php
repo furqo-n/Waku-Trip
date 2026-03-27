@@ -98,4 +98,21 @@ class Package extends Model
             },
         );
     }
+    public function skipsFlightTickets(): bool
+    {
+        $type = strtolower($this->type ?? '');
+        $skipKeywords = ['activity', 'private'];
+        
+        if (in_array($type, $skipKeywords)) {
+            return true;
+        }
+
+        // Check if any related category name contains the skip keywords
+        return $this->relatedCategories()
+            ->where(function($query) use ($skipKeywords) {
+                foreach ($skipKeywords as $keyword) {
+                    $query->orWhere('name', 'LIKE', "%{$keyword}%");
+                }
+            })->exists();
+    }
 }

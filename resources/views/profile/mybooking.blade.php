@@ -147,7 +147,7 @@
                         };
                         $statusLabel = match ($booking->status) {
                             'confirmed' => 'Confirmed',
-                            'pending' => 'Pending Payment',
+                            'pending' => 'Pending confirm',
                             default => ucfirst($booking->status)
                         };
                     @endphp
@@ -228,9 +228,9 @@
                                                 <i class="material-icons text-warning"
                                                     style="font-size: 24px;">error_outline</i>
                                                 <div>
-                                                    <strong class="text-dark d-block mb-1">Complete your
-                                                        payment</strong>
-                                                    <small class="text-secondary">Please finalize payment to secure
+                                                    <strong class="text-dark d-block mb-1">Confirm your
+                                                        booking</strong>
+                                                    <small class="text-secondary">Please Confirm payment to secure
                                                         your
                                                         reservation. Total:
                                                         {{ convert_currency($booking->total_price) }}</small>
@@ -256,7 +256,7 @@
                                             <button type="button" class="btn btn-danger px-4 rounded-3 text-white"
                                                 style="background-color: #BC002D; border: none;" data-bs-toggle="modal"
                                                 data-bs-target="#payModal{{ $booking->id }}">
-                                                Pay Now
+                                                Confirm Payment
                                             </button>
 
                                             <form action="{{ route('booking.cancel', $booking->id) }}" method="POST"
@@ -273,11 +273,6 @@
                                                 style="background-color: #BC002D; border: none;">
                                                 Manage Booking
                                             </a>
-                                            <button class="btn btn-outline-secondary px-4 rounded-3">
-                                                <i class="material-icons align-middle me-1"
-                                                    style="font-size: 18px;">download</i>
-                                                Voucher
-                                            </button>
                                         @endif
                                         <a href="{{ route('booking.guests', $booking->id) }}"
                                             class="btn btn-link text-danger" style="color: #BC002D !important;">Manage
@@ -333,55 +328,33 @@
 
                                         <div class="mb-4">
                                             <label class="form-label small fw-bold text-secondary text-uppercase"
-                                                style="letter-spacing: 0.5px;">Payment Method</label>
-                                            <div class="d-flex flex-column gap-2">
-                                                <label
-                                                    class="card bg-white border border-secondary border-opacity-25 shadow-sm p-3"
-                                                    style="cursor: pointer;">
-                                                    <div class="d-flex align-items-center gap-3">
-                                                        <input type="radio" name="payment_method" value="credit_card"
-                                                            checked class="form-check-input mt-0"
-                                                            style="width: 1.25em; height: 1.25em; accent-color: #BC002D;">
-                                                        <div class="flex-grow-1">
-                                                            <div class="d-flex align-items-center justify-content-between">
-                                                                <span class="fw-medium text-dark">Credit/Debit Card</span>
-                                                                <div class="d-flex gap-2">
-                                                                    <i class="fab fa-cc-visa fa-lg text-secondary"></i>
-                                                                    <i
-                                                                        class="fab fa-cc-mastercard fa-lg text-secondary"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </label>
-                                                <label
-                                                    class="card bg-white border border-secondary border-opacity-25 shadow-sm p-3"
-                                                    style="cursor: pointer;">
-                                                    <div class="d-flex align-items-center gap-3">
-                                                        <input type="radio" name="payment_method" value="bank_transfer"
-                                                            class="form-check-input mt-0"
-                                                            style="width: 1.25em; height: 1.25em; accent-color: #BC002D;">
-                                                        <div class="flex-grow-1">
-                                                            <div class="d-flex align-items-center justify-content-between">
-                                                                <span class="fw-medium text-dark">Bank Transfer</span>
-                                                                <i class="material-icons text-secondary">account_balance</i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </label>
+                                                style="letter-spacing: 0.5px;">Confirmation Status</label>
+                                            <div class="p-3 bg-light rounded-3 border border-dashed text-center">
+                                                <i class="material-icons text-primary mb-2"
+                                                    style="font-size: 32px;">info_outline</i>
+                                                <p class="small text-dark mb-0">You have completed your payment via
+                                                    Midtrans. Our team will verify the transaction and confirm your booking
+                                                    shortly.</p>
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-3 fw-bold shadow-sm"
-                                            style="background-color: #BC002D; border: none;">
-                                            Pay Secured Amount
-                                        </button>
-                                        <div class="text-center mt-3">
-                                            <small
-                                                class="text-secondary d-flex align-items-center justify-content-center gap-1">
-                                                <i class="material-icons" style="font-size: 14px;">lock</i>
-                                                Encrypted & Secure
-                                            </small>
+                                        <div class="mb-4">
+                                            <p class="small text-secondary mb-3">If you have already paid but your status is
+                                                still "Pending confirm", please click the button below to complete the
+                                                confirmation process.</p>
+                                            <button type="submit"
+                                                class="btn btn-primary w-100 py-3 rounded-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
+                                                style="border: none; background-color: #BC002D;">
+                                                <i class="material-icons">check_circle</i>
+                                                Confirm Payment
+                                            </button>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-outline-secondary w-100 py-2 rounded-3"
+                                                data-bs-dismiss="modal">
+                                                Got it
+                                            </button>
                                         </div>
                                     </form>
                                 </div>

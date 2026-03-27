@@ -23,6 +23,9 @@ class StoreOrderRequest extends FormRequest
             'guests' => 'required|integer|min:1',
             'total_price' => 'required|numeric|min:0',
             'special_requests' => 'nullable|string|max:1000',
+            'passport_number' => 'nullable|string|max:50',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|in:male,female,other',
         ];
     }
 }

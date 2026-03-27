@@ -169,6 +169,19 @@
         .collapse-itinerary.show {
             max-height: 2000px;
         }
+
+        /* Flight Ticket Card */
+        .ticket-card {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .ticket-card:hover {
+            border-color: #BC002D;
+            background: #fff;
+        }
     </style>
 </head>
 
@@ -193,11 +206,11 @@
         @endphp
 
         {{-- ─── Back Link ─── --}}
-        <a href="{{ route('mybooking') }}"
+        <a href="javascript:history.back()"
             class="d-inline-flex align-items-center gap-1 text-decoration-none text-secondary mb-3"
             style="font-size:14px;">
             <span class="material-icons" style="font-size:18px;">arrow_back</span>
-            Back to Bookings
+            Back
         </a>
 
         {{-- ─── Page Header ─── --}}
@@ -231,16 +244,11 @@
                     <span class="material-icons" style="font-size:18px;">headset_mic</span>
                     Contact Support
                 </a>
-                <a href="{{ route('booking.guests', $booking->id) }}"
-                    class="btn btn-outline-dark rounded-3 px-3 py-2 d-flex align-items-center gap-2"
-                    style="font-size:14px;">
-                    <span class="material-icons" style="font-size:18px;">edit</span>
-                    Edit Trip
-                </a>
-                <a href="#" class="btn text-white rounded-3 px-3 py-2 d-flex align-items-center gap-2"
+                <a href="{{ route('booking.receipt', $booking->id) }}" target="_blank"
+                    class="btn text-white rounded-3 px-3 py-2 d-flex align-items-center gap-2"
                     style="font-size:14px; background:#BC002D;">
-                    <span class="material-icons" style="font-size:18px;">download</span>
-                    Download Voucher
+                    <span class="material-icons" style="font-size:18px;">receipt_long</span>
+                    Download Receipt
                 </a>
             </div>
         </div>
@@ -407,6 +415,57 @@
                         </div>
                     </div>
                 </div>
+
+        {{-- Flight Tickets Section --}}
+        @if(!$package->skipsFlightTickets())
+                <div class="mb-card mb-4">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="material-icons" style="font-size:22px; color:#BC002D;">flight_takeoff</span>
+                            <h5 class="fw-bold mb-0">Flight Tickets</h5>
+                        </div>
+                        
+                        @if($booking->status === 'confirmed')
+                            <p class="text-secondary mb-3" style="font-size: 13px;">Your tickets for <strong>{{ $booking->pax_count }} Travelers</strong> to <strong>{{ $package->location_text ?? 'Japan' }}</strong> are ready.</p>
+
+                            @foreach($booking->passengers as $passenger)
+                                <div class="ticket-card p-3 mb-2 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-white p-2 rounded-circle shadow-sm">
+                                            <i class="material-icons text-danger" style="font-size: 20px;">airplane_ticket</i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0" style="font-size: 14px;">{{ $passenger->name }}</h6>
+                                            <small class="text-secondary" style="font-size: 11px;">E-Ticket • {{ $booking->booking_code }}-{{ $loop->iteration }}</small>
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('booking.ticket', [$booking->id, $passenger->id]) }}" target="_blank" class="btn btn-sm btn-outline-danger border-0 rounded-circle p-2">
+                                        <i class="material-icons" style="font-size: 18px;">open_in_new</i>
+                                    </a>
+                                </div>
+                            @endforeach
+
+                            <a href="{{ route('booking.tickets.all', $booking->id) }}" target="_blank" class="btn btn-danger w-100 rounded-3 mt-3 d-flex align-items-center justify-content-center gap-2"
+                                style="font-size:14px; background:#BC002D; border:none; text-decoration: none;">
+                                <i class="material-icons" style="font-size:18px;">file_download_done</i>
+                                Download All Tickets
+                            </a>
+                        @elseif($booking->status === 'cancelled')
+                            <div class="text-center py-4 bg-danger bg-opacity-10 rounded-3 border border-danger border-opacity-25">
+                                <i class="material-icons text-danger mb-2" style="font-size: 40px;">cancel</i>
+                                <h6 class="fw-bold text-danger mb-1">Trip Cancelled</h6>
+                                <p class="text-secondary mb-0 small px-3">This trip is no longer active due to cancellation.</p>
+                            </div>
+                        @else
+                            <div class="text-center py-4 bg-light rounded-3 border">
+                                <i class="material-icons text-secondary mb-2" style="font-size: 40px;">hourglass_empty</i>
+                                <h6 class="fw-bold text-dark mb-1">Waiting for Confirmation</h6>
+                                <p class="text-secondary mb-0 small px-3">Your tickets will be available once the admin confirms your payment.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+        @endif
 
                 {{-- Payment Summary --}}
                 <div class="mb-card mb-4">

@@ -294,6 +294,32 @@
                             </div>
                         </div>
 
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Passport Number</label>
+                                <input type="text" name="passport_number" class="form-control"
+                                    placeholder="e.g. A1234567" value="{{ old('passport_number') }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="form-control"
+                                    value="{{ old('date_of_birth') }}">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small text-secondary">Gender</label>
+                                <select name="gender" class="form-select">
+                                    <option value="">Select...</option>
+                                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female
+                                    </option>
+                                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label fw-semibold small text-secondary">Special Requests
                                 (Optional)</label>

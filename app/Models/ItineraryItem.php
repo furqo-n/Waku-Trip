@@ -2,28 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Facades\Storage;
 
-class Itinerary extends Model
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
+class ItineraryItem extends Model
 {
-    use HasFactory, \App\Traits\HasMedia;
+    use \App\Traits\HasMedia;
+
+    protected $fillable = ['itinerary_id', 'content', 'order', 'image_path', 'upload_status'];
+    protected $appends = ['image_url'];
 
     protected array $mediaFieldMaps = [
         'image_path' => 'primary_image',
     ];
-
-    protected $fillable = ['package_id', 'day_number', 'title', 'description', 'image_path', 'upload_status'];
-    protected $appends = ['image_url'];
-
-    protected function imagePath(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->getFirstMedia('primary_image')?->public_id ?: null,
-        );
-    }
 
     protected function imageUrl(): Attribute
     {
@@ -39,12 +31,10 @@ class Itinerary extends Model
                     return null;
                 }
 
-                // Already a full URL (legacy Cloudinary or external)
                 if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
                     return $value;
                 }
 
-                // If uploaded to Cloudinary, construct the URL from the path
                 if ($this->upload_status === 'uploaded') {
                     $cloudName = config('filesystems.disks.cloudinary.cloud');
                     if ($cloudName) {
@@ -52,19 +42,13 @@ class Itinerary extends Model
                     }
                 }
 
-                // Serve from local storage (pending, failed, or no Cloudinary config)
                 return asset('storage/' . $value);
             },
         );
     }
 
-    public function package()
+    public function itinerary()
     {
-        return $this->belongsTo(Package::class);
-    }
-
-    public function items()
-    {
-        return $this->hasMany(ItineraryItem::class)->orderBy('order');
+        return $this->belongsTo(Itinerary::class);
     }
 }

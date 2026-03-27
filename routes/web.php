@@ -39,9 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking/{id}/pay', [BookingController::class, 'pay'])->name('booking.pay');
     Route::get('/paid', [BookingController::class, 'paid'])->name('booking.paid');
     Route::get('/booking/{id}/manage', [BookingController::class, 'manage'])->name('booking.manage');
+    Route::get('/booking/{id}/receipt', [BookingController::class, 'receipt'])->name('booking.receipt');
     Route::get('/booking/{id}/guests', [BookingController::class, 'guests'])->name('booking.guests');
     Route::post('/booking/{id}/guests', [BookingController::class, 'storeGuest'])->name('booking.guests.store');
     Route::delete('/booking/guests/{guestId}', [BookingController::class, 'destroyGuest'])->name('booking.guests.destroy');
+    Route::get('/booking/{bookingId}/ticket/{passengerId}', [BookingController::class, 'downloadTicket'])->name('booking.ticket');
+    Route::get('/booking/{bookingId}/tickets/all', [BookingController::class, 'downloadAllTickets'])->name('booking.tickets.all');
 
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
@@ -53,7 +56,8 @@ Route::post('/news/{slug}/comments', [CommentController::class, 'store'])->name(
 Route::get('/order', [PaymentController::class, 'showOrderForm'])->name('order.form');
 Route::post('/order', [PaymentController::class, 'storeOrder'])->name('order.store')->middleware('auth');
 Route::get('/pay', [PaymentController::class, 'showPayment'])->name('pay.form')->middleware('auth');
-Route::post('/pay', [PaymentController::class, 'confirmPayment'])->name('pay.confirm')->middleware('auth');
+Route::get('/pay/confirm', [PaymentController::class, 'confirmPayment'])->name('pay.confirm')->middleware('auth');
+Route::post('/midtrans/callback', [PaymentController::class, 'notificationHandler'])->name('midtrans.callback');
 
 Route::post('/chatbot', [App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.chat')->middleware(['throttle:10,1', 'json.request']);
 Route::get('/chatbot/recommend', [App\Http\Controllers\ChatbotController::class, 'recommend'])->name('chatbot.recommend')->middleware(['throttle:10,1', 'json.request']);
