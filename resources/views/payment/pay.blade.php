@@ -315,12 +315,18 @@
                                 <span>Early Bird Discount (7%)</span>
                                 <span class="fw-bold">-{{ convert_currency($discount) }}</span>
                             </div>
+                            @if($voucherDiscount > 0)
+                            <div class="price-row small text-success mb-2">
+                                <span>Voucher Discount</span>
+                                <span class="fw-bold">-{{ convert_currency($voucherDiscount) }}</span>
+                            </div>
+                            @endif
 
                             <div class="total-row mt-3 pt-3 border-top border-dashed">
                                 <h5 class="fw-bold m-0 text-dark">Total</h5>
                                 <div class="text-end">
                                     <h3 class="fw-bold m-0 text-danger">
-                                        {{ convert_currency($totalPrice) }}
+                                        {{ convert_currency($finalTotal) }}
                                     </h3>
                                     <small class="text-secondary fw-bold"
                                         style="font-size: 0.7rem; letter-spacing: 0.5px;">{{ $currentCurrency }}
@@ -369,29 +375,26 @@
     @include('partials.footer')
     <!--================ Footer Area =================-->
 
-    <script>
-        const payButton = document.getElementById('pay-button');
-        payButton.addEventListener('click', function () {
-            // Trigger snap popup
-            window.snap.pay('{{ $snapToken }}', {
-                onSuccess: function (result) {
-                    window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
-                    console.log(result);
-                },
-                onPending: function (result) {
-                    window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
-                    console.log(result);
-                },
-                onError: function (result) {
-                    alert("Payment failed or encountered an error.");
-                    console.log(result);
-                },
-                onClose: function () {
-                    console.log('User closed the popup without finishing the payment');
-                }
-            });
+<script>
+    const payButton = document.getElementById('pay-button');
+    payButton.addEventListener('click', function () {
+        window.snap.pay('{{ $snapToken }}', {
+            onSuccess: function (result) {
+                window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
+            },
+            onPending: function (result) {
+                window.location.href = "{{ route('pay.confirm') }}?order_id={{ $booking->booking_code }}";
+            },
+            onError: function (result) {
+                alert("Payment failed or encountered an error.");
+                console.log(result);
+            },
+            onClose: function () {
+                console.log('User closed the popup without finishing the payment');
+            }
         });
-    </script>
+    });
+</script>
 
 </body>
 

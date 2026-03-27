@@ -26,6 +26,8 @@ class StoreOrderRequest extends FormRequest
             'passport_number' => 'nullable|string|max:50',
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|in:male,female,other',
+            'voucher_id' => 'nullable|integer|exists:vouchers,id',
+            'voucher_discount_amount' => 'nullable|numeric|min:0',
         ];
     }
 }

@@ -8,6 +8,8 @@ use App\Models\TripSchedule;
 use App\Services\BookingService;
 use App\Services\MidtransService;
 use App\Services\CurrencyService;
+use App\Services\VoucherService;
+use App\Services\VoucherCalculatorService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,11 +20,15 @@ class PaymentController extends Controller
 {
     protected $midtransService;
     protected $currencyService;
+    protected $voucherService;
+    protected $voucherCalculatorService;
 
-    public function __construct(MidtransService $midtransService, CurrencyService $currencyService)
+    public function __construct(MidtransService $midtransService, CurrencyService $currencyService, VoucherService $voucherService, VoucherCalculatorService $voucherCalculatorService)
     {
         $this->midtransService = $midtransService;
         $this->currencyService = $currencyService;
+        $this->voucherService = $voucherService;
+        $this->voucherCalculatorService = $voucherCalculatorService;
     }
     public function showOrderForm(Request $request): View|RedirectResponse
     {
@@ -107,9 +113,15 @@ class PaymentController extends Controller
         $data = BookingService::getPaymentViewData($bookingData);
         $data['booking'] = $booking;
 
+        // Update booking total with voucher discount if applied
+        $finalTotal = $data['finalTotal'];
+        if ($booking->total_price != $finalTotal) {
+            $booking->update(['total_price' => $finalTotal]);
+        }
+
         // Midtrans typically only supports IDR for Snap transactions in Indonesia.
         // We force conversion to IDR here so the amount in the popup matches the expected Rupiah value.
-        $idrAmount = $this->currencyService->convert($booking->total_price, 'IDR');
+        $idrAmount = $this->currencyService->convert($finalTotal, 'IDR');
 
         // Midtrans parameters
         $params = [
@@ -139,12 +151,82 @@ class PaymentController extends Controller
             return redirect('/')->with('error', 'Booking not found.');
         }
 
+        // Apply voucher if stored in session
+        if (session()->has('voucher_id') && session()->has('voucher_code')) {
+            $voucherId = session('voucher_id');
+            $voucherCode = session('voucher_code');
+            
+            try {
+                $result = $this->voucherService->apply(
+                    $voucherCode,
+                    Auth::id(),
+                    $booking->total_price,
+                    $booking->id
+                );
+                
+                // Clear voucher session after applying
+                session()->forget(['voucher_id', 'voucher_code']);
+            } catch (\Exception $e) {
+                // Voucher application failed, but continue with booking
+                session()->forget(['voucher_id', 'voucher_code']);
+            }
+        }
+
         if ($booking->status === 'success') {
             session()->forget(['booking_data', 'active_booking_id']);
             return redirect()->route('mybooking')->with('success', 'Payment successful! Your booking code is ' . $booking->booking_code);
         }
 
         return redirect()->route('mybooking')->with('info', 'Payment is being processed. Please check your booking status in a moment.');
+    }
+
+    public function validateVoucher(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50',
+            'order_amount' => 'required|numeric|min:0',
+        ]);
+
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['success' => false, 'error' => 'Please login first.'], 401);
+        }
+
+        $result = $this->voucherService->validate($request->code, $user->id, $request->order_amount);
+
+        if (!$result['valid']) {
+            return response()->json(['success' => false, 'error' => $result['error']]);
+        }
+
+        $voucher = $result['voucher'];
+        $discountAmount = $this->voucherCalculatorService->calculate($voucher, $request->order_amount);
+
+        // Store voucher in session for later application
+        session([
+            'voucher_id' => $voucher->id,
+            'voucher_code' => $voucher->code,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'voucher' => [
+                'id' => $voucher->id,
+                'code' => $voucher->code,
+                'title' => $voucher->title,
+                'type' => $voucher->type,
+                'value' => $voucher->value,
+                'max_discount' => $voucher->max_discount,
+            ],
+            'discount_amount' => $discountAmount,
+            'final_amount' => $request->order_amount - $discountAmount,
+        ]);
+    }
+
+    public function removeVoucher(Request $request)
+    {
+        session()->forget(['voucher_id', 'voucher_code']);
+
+        return response()->json(['success' => true]);
     }
 
     public function notificationHandler(Request $request)

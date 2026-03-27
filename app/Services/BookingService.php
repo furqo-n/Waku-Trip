@@ -74,6 +74,10 @@ class BookingService
         $discount = $basePrice * config('pricing.discount_rate', 0.07);
         $totalPrice = $basePrice + $ppn + $fee - $discount;
 
+        $voucherDiscount = $bookingData['voucher_discount_amount'] ?? 0;
+        $voucherId = $bookingData['voucher_id'] ?? null;
+        $finalTotal = $totalPrice - $voucherDiscount;
+
         $durationDays = \Carbon\Carbon::parse($schedule->start_date)->diffInDays(\Carbon\Carbon::parse($schedule->end_date)) + 1;
         $travelerName = $bookingData['first_name'] . ' ' . $bookingData['last_name'];
         $travelerEmail = $bookingData['email'];
@@ -90,6 +94,9 @@ class BookingService
             'ppn' => $ppn,
             'fee' => $fee,
             'discount' => $discount,
+            'voucherDiscount' => $voucherDiscount,
+            'voucherId' => $voucherId,
+            'finalTotal' => $finalTotal,
             'durationDays' => $durationDays,
             'travelerName' => $travelerName,
             'travelerEmail' => $travelerEmail,

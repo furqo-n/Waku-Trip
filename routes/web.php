@@ -57,6 +57,8 @@ Route::get('/order', [PaymentController::class, 'showOrderForm'])->name('order.f
 Route::post('/order', [PaymentController::class, 'storeOrder'])->name('order.store')->middleware('auth');
 Route::get('/pay', [PaymentController::class, 'showPayment'])->name('pay.form')->middleware('auth');
 Route::get('/pay/confirm', [PaymentController::class, 'confirmPayment'])->name('pay.confirm')->middleware('auth');
+Route::post('/validate-voucher', [PaymentController::class, 'validateVoucher'])->name('validate.voucher')->middleware('auth');
+Route::post('/remove-voucher', [PaymentController::class, 'removeVoucher'])->name('remove.voucher')->middleware('auth');
 Route::post('/midtrans/callback', [PaymentController::class, 'notificationHandler'])->name('midtrans.callback');
 
 Route::post('/chatbot', [App\Http\Controllers\ChatbotController::class, 'chat'])->name('chatbot.chat')->middleware(['throttle:10,1', 'json.request']);

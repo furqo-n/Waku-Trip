@@ -335,6 +335,26 @@
                 <!-- Right Column: Summary -->
                 <div class="col-lg-4">
                     <div class="sticky-summary">
+
+                        <!-- Voucher Code Card -->
+                        <div class="checkout-card p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="material-icons card-header-icon">confirmation_number</span>
+                                <h4 class="m-0 fw-bold text-dark">Apply Voucher</h4>
+                            </div>
+                            <p class="text-secondary small mb-3">Enter a valid voucher code to get a discount.</p>
+                            <div class="input-group">
+                                <input type="text" id="voucher-code" class="form-control" placeholder="Enter voucher code"
+                                    aria-label="Voucher code" style="border-radius: 8px 0 0 8px; text-transform: uppercase;">
+                                <button type="button" id="apply-voucher" class="btn btn-primary-custom" style="width: auto; border-radius: 0 8px 8px 0; padding: 0.75rem 1.5rem;">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="voucher-message" class="mt-2 small" style="display: none;"></div>
+                            <input type="hidden" id="voucher-id" name="voucher_id" value="">
+                            <input type="hidden" id="voucher-discount-amount" name="voucher_discount_amount" value="0">
+                        </div>
+
                         <!-- Order Summary Card -->
                         <div class="checkout-card p-0 shadow-sm border">
                             <div class="position-relative">
@@ -376,6 +396,10 @@
                                 <div class="price-row small text-success mb-2">
                                     <span>Early Bird Discount (7%)</span>
                                     <span class="fw-bold">-{{ convert_currency($discount) }}</span>
+                                </div>
+                                <div id="voucher-discount-row" class="price-row small text-success mb-2" style="display: none;">
+                                    <span id="voucher-discount-label">Voucher Discount</span>
+                                    <span class="fw-bold" id="voucher-discount-value">-</span>
                                 </div>
 
                                 <div class="total-row mt-3 pt-3 border-top border-dashed">
@@ -437,6 +461,150 @@
     <!--================ Footer Area start =================-->
     @include('partials.footer')
     <!--=============== Footer Area end =================-->
+
+    <script>
+        const applyVoucherBtn = document.getElementById('apply-voucher');
+        const voucherCodeInput = document.getElementById('voucher-code');
+        const voucherMessage = document.getElementById('voucher-message');
+        const voucherDiscountRow = document.getElementById('voucher-discount-row');
+        const voucherDiscountLabel = document.getElementById('voucher-discount-label');
+        const voucherDiscountValue = document.getElementById('voucher-discount-value');
+        const voucherIdInput = document.getElementById('voucher-id');
+        const voucherDiscountAmountInput = document.getElementById('voucher-discount-amount');
+
+        const originalTotal = {{ $finalTotal }};
+        const csrfToken = '{{ csrf_token() }}';
+        const currencySymbol = '{{ $currentCurrency }}';
+
+        let voucherApplied = false;
+        let currentVoucherDiscount = 0;
+
+        applyVoucherBtn.addEventListener('click', function () {
+            if (voucherApplied) {
+                removeVoucher();
+                return;
+            }
+
+            const code = voucherCodeInput.value.trim().toUpperCase();
+            if (!code) {
+                voucherMessage.textContent = 'Please enter a voucher code.';
+                voucherMessage.className = 'mt-2 small text-danger';
+                voucherMessage.style.display = 'block';
+                return;
+            }
+
+            applyVoucherBtn.disabled = true;
+            applyVoucherBtn.textContent = 'Applying...';
+
+            fetch('{{ route("validate.voucher") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: code,
+                    order_amount: originalTotal
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                applyVoucherBtn.disabled = false;
+
+                if (data.success) {
+                    voucherApplied = true;
+                    currentVoucherDiscount = data.discount_amount;
+                    voucherIdInput.value = data.voucher.id;
+                    voucherDiscountAmountInput.value = data.discount_amount;
+
+                    voucherMessage.innerHTML = `
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="material-icons text-success" style="font-size: 18px;">check_circle</span>
+                            <span class="text-success fw-bold">${data.voucher.title} applied!</span>
+                        </div>
+                    `;
+                    voucherMessage.className = 'mt-2 small text-success';
+                    voucherMessage.style.display = 'block';
+
+                    voucherDiscountRow.style.display = 'flex';
+                    if (data.voucher.type === 'percentage') {
+                        voucherDiscountLabel.textContent = `Voucher (${data.voucher.value}%)`;
+                    } else {
+                        voucherDiscountLabel.textContent = `Voucher (${data.voucher.code})`;
+                    }
+                    voucherDiscountValue.textContent = formatCurrency(data.discount_amount);
+
+                    updateTotalDisplay(data.discount_amount);
+                    voucherCodeInput.disabled = true;
+                    applyVoucherBtn.textContent = 'Remove';
+                    applyVoucherBtn.classList.remove('btn-primary-custom');
+                    applyVoucherBtn.classList.add('btn-outline-danger');
+                    applyVoucherBtn.style.borderColor = 'var(--primary-color)';
+                    applyVoucherBtn.style.color = 'var(--primary-color)';
+                } else {
+                    voucherMessage.textContent = data.error || 'Invalid voucher code.';
+                    voucherMessage.className = 'mt-2 small text-danger';
+                    voucherMessage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                applyVoucherBtn.disabled = false;
+                applyVoucherBtn.textContent = 'Apply';
+                voucherMessage.textContent = 'An error occurred. Please try again.';
+                voucherMessage.className = 'mt-2 small text-danger';
+                voucherMessage.style.display = 'block';
+            });
+        });
+
+        function removeVoucher() {
+            fetch('{{ route("remove.voucher") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                }
+            }).catch(() => {});
+
+            voucherApplied = false;
+            currentVoucherDiscount = 0;
+            voucherIdInput.value = '';
+            voucherDiscountAmountInput.value = '0';
+
+            voucherCodeInput.disabled = false;
+            voucherCodeInput.value = '';
+
+            voucherDiscountRow.style.display = 'none';
+            voucherMessage.style.display = 'none';
+
+            applyVoucherBtn.textContent = 'Apply';
+            applyVoucherBtn.classList.remove('btn-outline-danger');
+            applyVoucherBtn.classList.add('btn-primary-custom');
+            applyVoucherBtn.style.borderColor = '';
+            applyVoucherBtn.style.color = '';
+
+            updateTotalDisplay(0);
+        }
+
+        function updateTotalDisplay(voucherDiscount) {
+            const newTotal = originalTotal - voucherDiscount;
+            const totalDisplay = document.querySelector('.total-row h3');
+            totalDisplay.textContent = formatCurrency(newTotal);
+
+            const totalCurrencyLabel = document.querySelector('.total-row small');
+            totalCurrencyLabel.textContent = `${currencySymbol} TOTAL`;
+        }
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('en-US', {
+                style: 'currency',
+                currency: currencySymbol,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+    </script>
 
 </body>
 
